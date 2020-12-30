@@ -9,11 +9,12 @@ from patractinterface.base import SubstrateSubscriber
 
 evt_getted = 0
 
-class ContractInstanceTestCase(unittest.TestCase):
+class ContractSubscriberTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.subscriber = SubstrateSubscriber(substrate=SubstrateInterface(url="ws://127.0.0.1:9944"))
+        substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='canvas')
+        cls.subscriber = SubstrateSubscriber(substrate)
 
     #def setUp(self) -> None:
 

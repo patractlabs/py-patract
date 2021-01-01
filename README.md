@@ -4,9 +4,12 @@ Substrate Contract SDK for Python As a part of Himalia
 
 ----------
 
-PatractPy is a contract SDK to support the development of Python scripts that interact with contracts, including automated scripts to support testing. Unlike PatractGo, PatractPy is mainly for script development, so PatractPy mainly completes contract-related RPC interfaces, and completes contract deployment and instantiation-related operations. At the same time, PatractPy will implement PatractGo-based interaction and contract status monitoring support.
+PatractPy is a contract SDK to support the development of Python scripts that interact with contracts, including automated scripts to support testing. Unlike PatractGo, PatractPy is mainly for script development, so PatractPy mainly completes contract-related RPC interfaces, and completes contract deployment and instantiation-related operations.
 
-PatractPy will be based on [polkascan's Python Substrate Interface](https://github.com/polkascan/py-substrate-interface), which is a Go sdk for Substrate.
+PatractPy will provide support for [europa](https://github.com/patractlabs/europa) env, which is a good environment for contract exec sandbox,
+With PatractPy, we can write contract unittest by python, which is more friendly to developer and can easy use other test tools.
+
+PatractPy will be based on [polkascan's Python Substrate Interface](https://github.com/polkascan/py-substrate-interface), which is a Python sdk for Substrate.
 
 Element Group for disscusion: https://app.element.io/#/room/#PatractLabsDev:matrix.org
 

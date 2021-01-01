@@ -90,3 +90,21 @@ erc20.approve(alice, spender=bob.ss58_address, amt=10000)
 alice_allowance = erc20.allowance(alice.ss58_address, bob.ss58_address)
 
 ```
+
+`ERC20Observer` is a event observer for erc20 contract:
+
+```python
+observer = ERC20Observer.create_from_address(
+    substrate = substrate, 
+    contract_address = contract_address,
+    metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+)
+
+def on_transfer(num, fromAcc, toAcc, amt):
+    logging.info("on_transfer in block[{}] : {} {} {}".format(num, fromAcc, toAcc, amt))
+
+def on_approval(num, owner, spender, amt):
+    logging.info("on_approval in block[{}] : {} {} {}".format(num, owner, spender, amt))
+
+observer.scanEvents(on_transfer = on_transfer, on_approval = on_approval)
+```

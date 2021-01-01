@@ -45,3 +45,48 @@ The handler function can take the erc20 support as a example.
 ## ERC20 API
 
 ERC20 api provide a wapper to erc20 contract exec, read and observer events, it can be a example for contracts api calling.
+
+```python
+
+# init api
+substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='canvas')
+
+contract_metadata = ContractMetadata.create_from_file(
+    metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json'),
+    substrate=substrate
+)
+
+alice = Keypair.create_from_uri('//Alice')
+bob = Keypair.create_from_uri('//Bob')
+
+# erc20 api
+erc20 = ERC20.create_from_contracts(
+    substrate= substrate, 
+    contract_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
+    metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+)
+
+# deplay a erc20 contract
+erc20.putAndDeploy(alice, 1000000 * (10 ** 15))
+
+# read total supply
+total_supply = erc20.totalSupply()
+
+# transfer
+erc20.transferFrom(alice,
+    fromAcc=alice.ss58_address, 
+    toAcc=bob.ss58_address, 
+    amt=10000)
+
+erc20.transfer(alice, bob.ss58_address, 10000)
+
+# get balance
+alice_balance = erc20.balanceOf(alice.ss58_address)
+
+# approve
+erc20.approve(alice, spender=bob.ss58_address, amt=10000)
+
+# get allowance
+alice_allowance = erc20.allowance(alice.ss58_address, bob.ss58_address)
+
+```

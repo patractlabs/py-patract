@@ -51,9 +51,11 @@ class ERC20TestCase(unittest.TestCase):
     def approve(self):
         res = self.erc20.approve(self.alice, spender=self.bob.ss58_address, amt=10000)
         self.assertTrue(res.is_succes)
+        allowance = self.erc20.allowance(self.alice.ss58_address, self.bob.ss58_address)
+        self.assertEqual(allowance, 10000)
 
     def check_balance_of(self, acc, value):
-        res = self.erc20.balanceOf(acc, acc)
+        res = self.erc20.balanceOf(acc)
         self.assertEqual(res, value)
 
     def test_exec_and_read(self):

@@ -12,8 +12,36 @@ Element Group for disscusion: https://app.element.io/#/room/#PatractLabsDev:matr
 
 PatractPy will achieve the following support:
 
-- Complete the secondary packaging of the contract module interface, complete operations such as put_code, call, instantiate, etc.
-- Contract-based metadata information and contract interaction
-- Based on PatractGo, provide HTTP service for contract-based metadata information and contract interaction
-- Based on PatractGo, provide Scanning and monitoring support for contract to do statistics and analysis
+- Some support that missing in [polkascan's Python Substrate Interface](https://github.com/polkascan/py-substrate-interface), which is needed for contracts
+- Provide Scanning and monitoring support for contract to do statistics and analysis
 - Provide a SDK development example for ERC20 contract
+- Support For unittest to canvas or [europa](https://github.com/patractlabs/europa) env.
+
+## Basic Apis For Contracts
+
+As [polkascan's Python Substrate Interface](https://github.com/polkascan/py-substrate-interface) has provide some support to contract api, so we not need to important the api for contract calls, but there is some api to add:
+
+- `SubstrateSubscriber` is a subscriber support to subscribe data changes in chain, for example, the events in chain.
+- `get_contract_event_type` add event decode support for contracts.
+
+## ContractObserver
+
+ContractObserver can observer events for a contract:
+
+```python
+substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='canvas')
+contract_metadata = ContractMetadata.create_from_file(
+    metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json'),
+    substrate=substrate
+)
+observer = ContractObserver("0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48", contract_metadata, substrate)
+
+# for some handlers
+observer.scanEvents()
+```
+
+The handler function can take the erc20 support as a example.
+
+## ERC20 API
+
+ERC20 api provide a wapper to erc20 contract exec, read and observer events, it can be a example for contracts api calling.

@@ -1,9 +1,11 @@
 import os
 import logging
+import json
 
 from substrateinterface import SubstrateInterface, ContractInstance, ContractMetadata, ContractCode
 from substrateinterface.exceptions import SubstrateRequestException, DeployContractFailedException
 from substrateinterface import ContractCode, Keypair
+from scalecodec import ScaleBytes, ScaleDecoder
 
 class ContractAddressFailedException(Exception):
     pass
@@ -87,3 +89,27 @@ class ERC20:
         }
         return self.instance.exec(keypair, "approve", args, value=value, gas_limit=gas_limit)
 
+    def balanceOf(self, origin: str, owner: str):
+        self.check_address()
+        args = {
+            "owner" : owner
+        }
+        res = self.instance.read(keypair=Keypair(ss58_address = origin), method="balance_of", args=args)
+
+        data = res.value['result']['Ok']['data']
+
+        return_type = self.metadata.get_return_type_string_for_message("balance_of")
+        decoder = ScaleDecoder.get_decoder_class(return_type, ScaleBytes(data))
+        return decoder.decode()
+
+    def totalSupply(self):
+        self.check_address()
+        k = Keypair.create_from_uri('//Alice')
+        args = {}
+        res = self.instance.read(keypair=k, method="total_supply", args=args)
+
+        data = res.value['result']['Ok']['data']
+
+        return_type = self.metadata.get_return_type_string_for_message("total_supply")
+        decoder = ScaleDecoder.get_decoder_class(return_type, ScaleBytes(data))
+        return decoder.decode()

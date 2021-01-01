@@ -69,3 +69,21 @@ class ERC20:
             "value" : amt,
         }
         return self.instance.exec(keypair, "transfer", args, value=value, gas_limit=gas_limit)
+
+    def transferFrom(self, keypair: Keypair, fromAcc, toAcc, amt, value = 0, gas_limit = 100000000000):
+        self.check_address()
+        args = {
+            "from" : fromAcc,
+            "to" : toAcc,
+            "value" : amt,
+        }
+        return self.instance.exec(keypair, "transfer_from", args, value=value, gas_limit=gas_limit)
+
+    def approve(self, keypair: Keypair, spender, amt, value = 0, gas_limit = 100000000000):
+        self.check_address()
+        args = {
+            "spender" : spender,
+            "value" : amt,
+        }
+        return self.instance.exec(keypair, "approve", args, value=value, gas_limit=gas_limit)
+

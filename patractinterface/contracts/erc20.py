@@ -6,6 +6,8 @@ from substrateinterface import SubstrateInterface, ContractInstance, ContractMet
 from substrateinterface.exceptions import SubstrateRequestException, DeployContractFailedException
 from substrateinterface import ContractCode, Keypair
 from scalecodec import ScaleBytes, ScaleDecoder
+from patractinterface.observer import ContractObserver
+from patractinterface.base import get_contract_event_type
 
 class ContractAddressFailedException(Exception):
     pass
@@ -113,3 +115,52 @@ class ERC20:
         return_type = self.metadata.get_return_type_string_for_message("total_supply")
         decoder = ScaleDecoder.get_decoder_class(return_type, ScaleBytes(data))
         return decoder.decode()
+
+class ERC20Observer:
+    def __init__(self, address: str, substrate: SubstrateInterface, metadata: ContractMetadata, observer: ContractObserver):
+        self.substrate = substrate
+        self.contract_address = address
+        self.metadata = metadata
+        self.observer = observer
+        self.event_typ = get_contract_event_type(metadata)
+
+    @classmethod
+    def create_from_address(cls, contract_address: str, metadata_file: str, substrate: SubstrateInterface):
+        metadata = ContractMetadata.create_from_file(metadata_file, substrate=substrate)
+        observer = ContractObserver(contract_address, metadata, substrate)
+        return cls(address=contract_address, metadata=metadata, substrate=substrate, observer=observer)
+
+    def scanEvents(self, from_num = None, on_transfer = None, on_approval = None):
+        def handler(num, evt):
+            #logging.info("handler {} {}".format(num, evt))
+
+            if evt['event_id'] != 'ContractExecution':
+                return
+
+            for p in evt['params']:
+                typ = p['type']
+                if typ == 'Vec<u8>':
+                    logging.info("handler data {}".format(p['valueRaw']))
+                    decoder = ScaleDecoder.get_decoder_class(self.event_typ, 
+                        ScaleBytes('0x' + p['valueRaw']),
+                        self.substrate.runtime_config)
+                    evt = decoder.decode()
+                    if 'Transfer' in evt:
+                        if 'Some' in evt['Transfer']['from']:
+                            fromAcc = evt['Transfer']['from']['Some']
+                        else:
+                            fromAcc = None
+
+                        if 'Some' in evt['Transfer']['to']:
+                            toAcc = evt['Transfer']['to']['Some']
+                        else:
+                            toAcc = None
+
+                        on_transfer(num, fromAcc, toAcc, evt['Transfer']['value'])
+                        return
+
+                    if 'Approve' in evt:
+                        on_approval(num, evt['Approve']['owner'], evt['Approve']['spender'], evt['Approve']['value'])
+                        return
+
+        self.observer.scanEvents(from_num, handler)

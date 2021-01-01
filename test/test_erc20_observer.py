@@ -8,10 +8,10 @@ from scalecodec import ScaleBytes
 from substrateinterface import SubstrateInterface, ContractMetadata, ContractInstance, Keypair
 from substrateinterface.utils.ss58 import ss58_encode
 
-from patractinterface.contracts.erc20 import ERC20
+from patractinterface.contracts.erc20 import ERC20, ERC20Observer
 
 
-class ERC20TestCase(unittest.TestCase):
+class ERC20ObserverTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -23,6 +23,7 @@ class ERC20TestCase(unittest.TestCase):
             metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json'),
             substrate=cls.substrate
         )
+
         cls.erc20 = ERC20.create_from_contracts(
             substrate= cls.substrate, 
             contract_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
@@ -33,33 +34,30 @@ class ERC20TestCase(unittest.TestCase):
 
         cls.erc20.putAndDeploy(cls.alice, 1000000 * (10 ** 15))
 
-    def transfer(self):
-        supply = self.erc20.totalSupply()
-        self.assertEqual(supply, 1000000 * (10 ** 15))
+        cls.observer = ERC20Observer.create_from_address(
+            substrate = cls.substrate, 
+            contract_address = cls.erc20.contract_address,
+            metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+        )
 
-        res = self.erc20.transfer(self.alice, self.bob.ss58_address, 10000)
-        self.assertTrue(res.is_succes)
-        self.check_balance_of(self.bob.ss58_address, 10000)
-
-    def transferFrom(self):
-        res = self.erc20.transferFrom(self.alice,
+    def test_watch(self):
+        self.erc20.transfer(self.alice, self.bob.ss58_address, 10000)
+        self.erc20.transferFrom(self.alice,
             fromAcc=self.alice.ss58_address, 
             toAcc=self.bob.ss58_address, 
             amt=10000)
-        self.assertTrue(res.is_succes)
+        self.erc20.approve(self.alice, spender=self.bob.ss58_address, amt=10000)
+        self.erc20.transfer(self.alice, self.bob.ss58_address, 100000)
 
-    def approve(self):
-        res = self.erc20.approve(self.alice, spender=self.bob.ss58_address, amt=10000)
-        self.assertTrue(res.is_succes)
+        logging.info("start scan")
 
-    def check_balance_of(self, acc, value):
-        res = self.erc20.balanceOf(acc, acc)
-        self.assertEqual(res, value)
+        def on_transfer(num, fromAcc, toAcc, amt):
+            logging.info("on_transfer in {} : {} {} {}".format(num, fromAcc, toAcc, amt))
 
-    def test_exec_and_read(self):
-        self.transfer()
-        self.approve()
-        self.transferFrom()
+        def on_approval(num, owner, spender, amt):
+            logging.info("on_approval in {} : {} {} {}".format(num, owner, spender, amt))
+
+        self.observer.scanEvents(on_transfer = on_transfer, on_approval = on_approval)
 
 if __name__ == '__main__':
     unittest.main()

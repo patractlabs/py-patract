@@ -73,7 +73,20 @@ class ContractObserver:
         else:
             raise SubstrateRequestException("Error occurred during retrieval of events")
 
-    def scanEvents(self, from_num = None):
+    def process_handler(self, handler, num, evt):
+        if handler == None:
+            return
+        
+        logging.debug("event: {} data {}".format(num, evt))
+
+        if evt['module_id'] != 'Contracts':
+            return
+        
+        logging.debug("event: {} data {}".format(num, evt))
+        handler(num, evt)
+
+
+    def scanEvents(self, from_num = None, handler = None):
         def result_handler(res):
             # Check if extrinsic is included and finalized
             if 'params' in res:
@@ -85,7 +98,8 @@ class ContractObserver:
 
                 for c in res['params']['result']['changes']:
                     evt = self.decode_event(metadata_decoder, c[1])
-                    logging.info("event: {} data {}".format(blk_number, evt))
+                    for e in evt.value:
+                        self.process_handler(handler, blk_number, e)
 
 
         chain_head = self.substrate.get_chain_head()
@@ -103,7 +117,7 @@ class ContractObserver:
                 hash = self.substrate.get_block_hash(num)
                 blk_events = self.get_block_events(block_hash = hash, metadata_decoder = metadata_decoder)
                 for evt in blk_events.elements:
-                    logging.info("get event {} to {}".format(num, evt))
+                    self.process_handler(handler, num, evt.value)
 
             from_num = blk_number + 1
             blk_number = self.substrate.get_block_number(self.substrate.get_chain_head())

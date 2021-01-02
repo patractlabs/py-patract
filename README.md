@@ -114,7 +114,9 @@ observer.scanEvents(on_transfer = on_transfer, on_approval = on_approval)
 
 ## Unittest Node Environment
 
-PatractPy can support write contract unittest by node environment:
+PatractPy can support write contract unittest by node environment.
+
+At First We need install [europa](https://github.com/patractlabs/europa).
 
 ```python
 from patractinterface.contracts.erc20 import ERC20
@@ -123,7 +125,7 @@ from patractinterface.unittest.env import SubstrateTestEnv
 class UnittestEnvTest(unittest.TestCase):
     @classmethod
     def setUp(cls):
-        # start env
+        # start env or use canvas for a 6s block
         cls.env = SubstrateTestEnv.create_europa(port=39944)
         cls.env.startNode()
 

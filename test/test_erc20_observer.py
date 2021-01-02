@@ -17,7 +17,7 @@ class ERC20ObserverTestCase(unittest.TestCase):
     def setUpClass(cls):
         logging.info("init deplay")
 
-        cls.substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='canvas')
+        cls.substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='default')
 
         cls.contract_metadata = ContractMetadata.create_from_file(
             metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json'),

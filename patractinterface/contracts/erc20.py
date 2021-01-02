@@ -97,12 +97,7 @@ class ERC20:
             "owner" : owner
         }
         res = self.instance.read(keypair=Keypair(ss58_address = owner), method="balance_of", args=args)
-
-        data = res.value['result']['Ok']['data']
-
-        return_type = self.metadata.get_return_type_string_for_message("balance_of")
-        decoder = ScaleDecoder.get_decoder_class(return_type, ScaleBytes(data))
-        return decoder.decode()
+        return res.value['result']['Ok']['data']
 
     def allowance(self, owner: str, spender: str):
         self.check_address()
@@ -112,11 +107,7 @@ class ERC20:
         }
         res = self.instance.read(keypair=Keypair(ss58_address = owner), method="allowance", args=args)
 
-        data = res.value['result']['Ok']['data']
-
-        return_type = self.metadata.get_return_type_string_for_message("allowance")
-        decoder = ScaleDecoder.get_decoder_class(return_type, ScaleBytes(data))
-        return decoder.decode()
+        return res.value['result']['Ok']['data']
 
     def totalSupply(self):
         self.check_address()
@@ -124,11 +115,9 @@ class ERC20:
         args = {}
         res = self.instance.read(keypair=k, method="total_supply", args=args)
 
-        data = res.value['result']['Ok']['data']
+        logging.debug("results {}".format(res.value))
 
-        return_type = self.metadata.get_return_type_string_for_message("total_supply")
-        decoder = ScaleDecoder.get_decoder_class(return_type, ScaleBytes(data))
-        return decoder.decode()
+        return res.value['result']['Ok']['data']
 
 class ERC20Observer:
     def __init__(self, address: str, substrate: SubstrateInterface, metadata: ContractMetadata, observer: ContractObserver):
@@ -154,23 +143,13 @@ class ERC20Observer:
             for p in evt['params']:
                 typ = p['type']
                 if typ == 'Vec<u8>':
-                    logging.info("handler data {}".format(p['valueRaw']))
+                    logging.info("handler data {}".format(p['value']))
                     decoder = ScaleDecoder.get_decoder_class(self.event_typ, 
-                        ScaleBytes('0x' + p['valueRaw']),
+                        ScaleBytes(p['value']),
                         self.substrate.runtime_config)
                     evt = decoder.decode()
                     if 'Transfer' in evt:
-                        if 'Some' in evt['Transfer']['from']:
-                            fromAcc = evt['Transfer']['from']['Some']
-                        else:
-                            fromAcc = None
-
-                        if 'Some' in evt['Transfer']['to']:
-                            toAcc = evt['Transfer']['to']['Some']
-                        else:
-                            toAcc = None
-
-                        on_transfer(num, fromAcc, toAcc, evt['Transfer']['value'])
+                        on_transfer(num, evt['Transfer']['from'], evt['Transfer']['to'], evt['Transfer']['value'])
                         return
 
                     if 'Approve' in evt:

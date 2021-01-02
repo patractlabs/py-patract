@@ -111,3 +111,47 @@ def on_approval(num, owner, spender, amt):
 
 observer.scanEvents(on_transfer = on_transfer, on_approval = on_approval)
 ```
+
+## Unittest Node Environment
+
+PatractPy can support write contract unittest by node environment:
+
+```python
+from patractinterface.contracts.erc20 import ERC20
+from patractinterface.unittest.env import SubstrateTestEnv
+
+class UnittestEnvTest(unittest.TestCase):
+    @classmethod
+    def setUp(cls):
+        # start env
+        cls.env = SubstrateTestEnv.create_europa(port=39944)
+        cls.env.startNode()
+
+        cls.api = SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
+        cls.alice = Keypair.create_from_uri('//Alice')
+        cls.bob = Keypair.create_from_uri('//Bob')
+
+        cls.erc20 = ERC20.create_from_contracts(
+            substrate= cls.substrate, 
+            contract_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
+            metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+        )
+        cls.erc20.putAndDeploy(alice, 1000000 * (10 ** 15))
+
+        return
+
+    def tearDown(cls):
+        cls.env.stopNode()
+
+    def test_transfer(self):
+        self.erc20.transferFrom(alice,
+            fromAcc=alice.ss58_address, 
+            toAcc=bob.ss58_address, 
+            amt=10000)
+        # some more test case
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+By example, we can use python to write testcase for some complex logics, by [europa](https://github.com/patractlabs/europa), we can test the contracts for python scripts.

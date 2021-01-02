@@ -1,23 +1,25 @@
 import os
-import json
 import unittest
 import logging
-import pytest
 
-from scalecodec import ScaleBytes
-from substrateinterface import SubstrateInterface, ContractMetadata, ContractInstance, Keypair
+from substrateinterface import SubstrateInterface, ContractMetadata, Keypair
 from substrateinterface.utils.ss58 import ss58_encode
-
+from patractinterface.unittest.env import SubstrateTestEnv
 from patractinterface.contracts.erc20 import ERC20
 
 
 class ERC20TestCase(unittest.TestCase):
 
     @classmethod
+    def tearDown(cls):
+        cls.env.stopNode()
+
+    @classmethod
     def setUpClass(cls):
         logging.info("init deplay")
-
-        cls.substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='default')
+        cls.env = SubstrateTestEnv.create_europa(port=39944)
+        cls.env.startNode()
+        cls.substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
 
         cls.contract_metadata = ContractMetadata.create_from_file(
             metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json'),

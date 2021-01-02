@@ -19,7 +19,7 @@ class SubstrateSubscriber:
         method = namespace + '_' + method_suffix
         return self.substrate.rpc_request(method=method, params=args, result_handler=handler)
 
-    def unsubscribe(self, handler, namespace, unsubscribe_method_suffix):
+    def unsubscribe(self, namespace, unsubscribe_method_suffix):
         method = namespace + '_' + unsubscribe_method_suffix
         return self.substrate.rpc_request(method=method)
 

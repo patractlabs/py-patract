@@ -7,14 +7,21 @@ from scalecodec import ScaleBytes, ScaleDecoder
 from substrateinterface import SubstrateInterface, ContractMetadata, ContractInstance, Keypair
 from substrateinterface.utils.ss58 import ss58_encode
 from patractinterface.base import SubstrateSubscriber, get_contract_event_type
+from patractinterface.unittest.env import SubstrateTestEnv
 
 evt_getted = 0
 
 class ContractSubscriberTestCase(unittest.TestCase):
+    @classmethod
+    def tearDown(cls):
+        cls.env.stopNode()
 
     @classmethod
     def setUpClass(cls):
-        substrate=SubstrateInterface(url="ws://127.0.0.1:9944", type_registry_preset='canvas')
+        cls.env = SubstrateTestEnv.create_europa(port=39944)
+        cls.env.startNode()
+        substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
+
         cls.subscriber = SubstrateSubscriber(substrate)
         cls.substrate = substrate
 
@@ -50,7 +57,7 @@ class ContractSubscriberTestCase(unittest.TestCase):
             self.substrate.runtime_config)
         evtTransferArgs = decoder.decode()
         logging.debug("evtTransfer {}".format(evtTransferArgs))
-        self.assertEqual(evtTransferArgs['Some'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
+        self.assertEqual(evtTransferArgs, '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
 
         type_data = get_contract_event_type(contract_metadata)
         logging.debug("type_event_data {}".format(type_data))
@@ -59,8 +66,8 @@ class ContractSubscriberTestCase(unittest.TestCase):
             ScaleBytes("0x000001d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d0000a0dec5adc9353600000000000000"),
             self.substrate.runtime_config)
         evtTransfer1 = decoder.decode()
-        self.assertEqual(evtTransfer1['Transfer']['from']['None'], None)
-        self.assertEqual(evtTransfer1['Transfer']['to']['Some'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
+        self.assertEqual(evtTransfer1['Transfer']['from'], None)
+        self.assertEqual(evtTransfer1['Transfer']['to'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
         self.assertEqual(evtTransfer1['Transfer']['value'], 1000000000000000000000)
 
         logging.debug("evtTransfer {}".format(evtTransfer1))
@@ -69,8 +76,8 @@ class ContractSubscriberTestCase(unittest.TestCase):
             ScaleBytes("0x0001d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d018eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a4810270000000000000000000000000000"),
             self.substrate.runtime_config)
         evtTransfer2 = decoder.decode()
-        self.assertEqual(evtTransfer2['Transfer']['from']['Some'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
-        self.assertEqual(evtTransfer2['Transfer']['to']['Some'], '0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48')
+        self.assertEqual(evtTransfer2['Transfer']['from'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
+        self.assertEqual(evtTransfer2['Transfer']['to'], '0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48')
         self.assertEqual(evtTransfer2['Transfer']['value'], 10000)
 
         logging.debug("evtTransfer2 {}".format(evtTransfer2))

@@ -83,7 +83,7 @@ class ContractObserver:
             return
         
         logging.debug("event: {} data {}".format(num, evt))
-        handler(num, evt)
+        return handler(num, evt)
 
 
     def scanEvents(self, from_num = None, handler = None):
@@ -99,7 +99,7 @@ class ContractObserver:
                 for c in res['params']['result']['changes']:
                     evt = self.decode_event(metadata_decoder, c[1])
                     for e in evt.value:
-                        self.process_handler(handler, blk_number, e)
+                        return self.process_handler(handler, blk_number, e)
 
 
         chain_head = self.substrate.get_chain_head()
@@ -117,7 +117,9 @@ class ContractObserver:
                 hash = self.substrate.get_block_hash(num)
                 blk_events = self.get_block_events(block_hash = hash, metadata_decoder = metadata_decoder)
                 for evt in blk_events.elements:
-                    self.process_handler(handler, num, evt.value)
+                    res = self.process_handler(handler, num, evt.value)
+                    if not res == None:
+                        return
 
             from_num = blk_number + 1
             blk_number = self.substrate.get_block_number(self.substrate.get_chain_head())

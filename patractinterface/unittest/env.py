@@ -38,7 +38,7 @@ class SubstrateTestEnv:
         self.thread = threading.Thread(target=loggerThread, name=self.name)
         self.thread.start()
 
-        time.sleep(1) # for startup
+        time.sleep(3) # for startup
 
         logging.info("startNode {}".format(self.name))
         return

@@ -133,9 +133,13 @@ class ERC20Observer:
         observer = ContractObserver(contract_address, metadata, substrate)
         return cls(address=contract_address, metadata=metadata, substrate=substrate, observer=observer)
 
-    def scanEvents(self, from_num = None, on_transfer = None, on_approval = None):
+    def scanEvents(self, from_num = None, to_num = None, on_transfer = None, on_approval = None):
         def handler(num, evt):
             #logging.info("handler {} {}".format(num, evt))
+
+            if to_num != None and num > to_num:
+                logging.info("return by tonum")
+                return True
 
             if evt['event_id'] != 'ContractExecution':
                 return

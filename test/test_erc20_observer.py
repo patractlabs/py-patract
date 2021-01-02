@@ -61,7 +61,7 @@ class ERC20ObserverTestCase(unittest.TestCase):
         def on_approval(num, owner, spender, amt):
             logging.info("on_approval in {} : {} {} {}".format(num, owner, spender, amt))
 
-        self.observer.scanEvents(on_transfer = on_transfer, on_approval = on_approval)
+        self.observer.scanEvents(to_num = 5, on_transfer = on_transfer, on_approval = on_approval)
 
 if __name__ == '__main__':
     unittest.main()

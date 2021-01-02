@@ -20,6 +20,15 @@ PatractPy will achieve the following support:
 - Provide a SDK development example for ERC20 contract
 - Support For unittest to canvas or [europa](https://github.com/patractlabs/europa) env.
 
+For Unittest, should install [europa](https://github.com/patractlabs/europa) at first.
+
+```bash
+europa --version
+europa 0.1.0-3f71403-x86_64-linux-gnu
+```
+
+All of test pased by europa environment.
+
 ## Basic Apis For Contracts
 
 As [polkascan's Python Substrate Interface](https://github.com/polkascan/py-substrate-interface) has provide some support to contract api, so we not need to important the api for contract calls, but there is some api to add:

@@ -125,7 +125,6 @@ class ERC20Observer:
         self.contract_address = address
         self.metadata = metadata
         self.observer = observer
-        self.event_typ = get_contract_event_type(metadata)
 
     @classmethod
     def create_from_address(cls, contract_address: str, metadata_file: str, substrate: SubstrateInterface):
@@ -135,29 +134,12 @@ class ERC20Observer:
 
     def scanEvents(self, from_num = None, to_num = None, on_transfer = None, on_approval = None):
         def handler(num, evt):
-            #logging.info("handler {} {}".format(num, evt))
-
-            if to_num != None and num > to_num:
-                logging.info("return by tonum")
-                return True
-
-            if evt['event_id'] != 'ContractExecution':
+            if 'Transfer' in evt:
+                on_transfer(num, evt['Transfer']['from'], evt['Transfer']['to'], evt['Transfer']['value'])
                 return
 
-            for p in evt['params']:
-                typ = p['type']
-                if typ == 'Vec<u8>':
-                    logging.info("handler data {}".format(p['value']))
-                    decoder = ScaleDecoder.get_decoder_class(self.event_typ, 
-                        ScaleBytes(p['value']),
-                        self.substrate.runtime_config)
-                    evt = decoder.decode()
-                    if 'Transfer' in evt:
-                        on_transfer(num, evt['Transfer']['from'], evt['Transfer']['to'], evt['Transfer']['value'])
-                        return
+            if 'Approve' in evt:
+                on_approval(num, evt['Approve']['owner'], evt['Approve']['spender'], evt['Approve']['value'])
+                return
 
-                    if 'Approve' in evt:
-                        on_approval(num, evt['Approve']['owner'], evt['Approve']['spender'], evt['Approve']['value'])
-                        return
-
-        self.observer.scanEvents(from_num, handler)
+        self.observer.scanEvents(from_num, to_num, handler)

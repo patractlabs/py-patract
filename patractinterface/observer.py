@@ -18,6 +18,7 @@ class ContractObserver:
         self.contract_address = contract_address
         self.metadata = metadata
         self.subscriber = SubstrateSubscriber(substrate)
+        self.event_decoder_typ = get_contract_event_type(metadata)
 
     @classmethod
     def create_from_address(cls, contract_address: str, metadata_file: str,
@@ -85,8 +86,28 @@ class ContractObserver:
         logging.debug("event: {} data {}".format(num, evt))
         return handler(num, evt)
 
+    def scanEvents(self, from_num = None, to_num = None, handler = None):
+        def handlerContracts(num, evt):
+            if to_num != None and num > to_num:
+                logging.info("return by tonum")
+                return True
 
-    def scanEvents(self, from_num = None, handler = None):
+            if evt['event_id'] != 'ContractExecution':
+                return
+
+            for p in evt['params']:
+                typ = p['type']
+                if typ == 'Vec<u8>':
+                    decoder = ScaleDecoder.get_decoder_class(self.event_decoder_typ, 
+                        ScaleBytes(p['value']),
+                        self.substrate.runtime_config)
+                    evtDecoded = decoder.decode()
+                    if handler is not None:
+                        handler(num, evtDecoded)
+
+        return self.scanChainEvents(from_num, handlerContracts)
+
+    def scanChainEvents(self, from_num = None, handler = None):
         def result_handler(res):
             # Check if extrinsic is included and finalized
             if 'params' in res:

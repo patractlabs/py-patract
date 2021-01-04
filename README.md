@@ -112,14 +112,40 @@ observer = ERC20Observer.create_from_address(
     metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
 )
 
-def on_transfer(num, fromAcc, toAcc, amt):
-    logging.info("on_transfer in block[{}] : {} {} {}".format(num, fromAcc, toAcc, amt))
+def on_transfer(num, evt):
+    logging.info("on_transfer in {} : {} {} {}".format(num, evt['from'], evt['to'], evt['value']))
 
-def on_approval(num, owner, spender, amt):
-    logging.info("on_approval in block[{}] : {} {} {}".format(num, owner, spender, amt))
+def on_approval(num, evt):
+    logging.info("on_approval in {} : {} {} {}".format(num, evt['owner'], evt['spender'], evt['value']))
+
 
 observer.scanEvents(on_transfer = on_transfer, on_approval = on_approval)
 ```
+
+### Observer For Contracts
+
+`ContractObserver` is a observer to listen events by contract with a given address:
+
+```python
+observer = ContractObserver.create_from_address(
+    substrate = substrate, 
+    contract_address = 'contract_address',
+    metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+)
+
+def on_transfer(num, evt):
+    logging.info("on_transfer in {} : {} {} {}".format(num, evt['from'], evt['to'], evt['value']))
+
+def on_approval(num, evt):
+    logging.info("on_approval in {} : {} {} {}".format(num, evt['owner'], evt['spender'], evt['value']))
+
+observer.scanEvents(from_num, to_num, {
+    'Transfer': on_transfer,
+    'Approve': on_approval
+})
+```
+
+`handlers` is a hander dictionary by name to hander function.
 
 ## Unittest Node Environment
 

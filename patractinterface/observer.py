@@ -11,7 +11,6 @@ from substrateinterface.exceptions import SubstrateRequestException
 from patractinterface.base import *
 from substrateinterface.constants import *
 
-
 class ContractObserver:
     def __init__(self, contract_address: str, metadata: ContractMetadata = None, substrate: SubstrateInterface = None):
         self.substrate = substrate
@@ -86,7 +85,7 @@ class ContractObserver:
         logging.debug("event: {} data {}".format(num, evt))
         return handler(num, evt)
 
-    def scanEvents(self, from_num = None, to_num = None, handler = None):
+    def scanEvents(self, from_num = None, to_num = None, handlers = None):
         def handlerContracts(num, evt):
             if to_num != None and num > to_num:
                 logging.info("return by tonum")
@@ -102,8 +101,11 @@ class ContractObserver:
                         ScaleBytes(p['value']),
                         self.substrate.runtime_config)
                     evtDecoded = decoder.decode()
-                    if handler is not None:
-                        handler(num, evtDecoded)
+                    keys = list(evtDecoded.keys())
+                    if len(keys) == 1:
+                        h = handlers.get(keys[0], None)
+                        if h is not None:
+                            h(num, evtDecoded[keys[0]])
 
         return self.scanChainEvents(from_num, handlerContracts)
 

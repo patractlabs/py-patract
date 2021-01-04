@@ -133,13 +133,7 @@ class ERC20Observer:
         return cls(address=contract_address, metadata=metadata, substrate=substrate, observer=observer)
 
     def scanEvents(self, from_num = None, to_num = None, on_transfer = None, on_approval = None):
-        def handler(num, evt):
-            if 'Transfer' in evt:
-                on_transfer(num, evt['Transfer']['from'], evt['Transfer']['to'], evt['Transfer']['value'])
-                return
-
-            if 'Approve' in evt:
-                on_approval(num, evt['Approve']['owner'], evt['Approve']['spender'], evt['Approve']['value'])
-                return
-
-        self.observer.scanEvents(from_num, to_num, handler)
+        self.observer.scanEvents(from_num, to_num, {
+            'Transfer': on_transfer,
+            'Approve': on_approval
+        })

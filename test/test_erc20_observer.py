@@ -55,11 +55,11 @@ class ERC20ObserverTestCase(unittest.TestCase):
 
         logging.info("start scan")
 
-        def on_transfer(num, fromAcc, toAcc, amt):
-            logging.info("on_transfer in {} : {} {} {}".format(num, fromAcc, toAcc, amt))
+        def on_transfer(num, evt):
+            logging.info("on_transfer in {} : {} {} {}".format(num, evt['from'], evt['to'], evt['value']))
 
-        def on_approval(num, owner, spender, amt):
-            logging.info("on_approval in {} : {} {} {}".format(num, owner, spender, amt))
+        def on_approval(num, evt):
+            logging.info("on_approval in {} : {} {} {}".format(num, evt['owner'], evt['spender'], evt['value']))
 
         self.observer.scanEvents(to_num = 5, on_transfer = on_transfer, on_approval = on_approval)
 

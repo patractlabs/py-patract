@@ -45,6 +45,23 @@ As [polkascan's Python Substrate Interface](https://github.com/polkascan/py-subs
 - `SubstrateSubscriber` is a subscriber support to subscribe data changes in chain, for example, the events in chain.
 - `get_contract_event_type` add event decode support for contracts.
 
+we add a factory to put code and deploy contracts to chain:
+
+```python
+factory = ContractFactory.create_from_file(
+    substrate= self.substrate, 
+    code_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
+    metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+)
+
+res = factory.put_code(self.alice)
+self.assertTrue(res.is_succes)
+
+api = factory.new(self.alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
+```
+
+The factory will generate constructors from metadata file.
+
 we add api by metadata for Contract,  api will auto generate caller for contract from metadata:
 
 ```python

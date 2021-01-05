@@ -182,6 +182,10 @@ class ContractFactory:
     def address(self):
         return self.contract_address
 
+    @property
+    def code_hash(self):
+        return self.code.code_hash
+
     def _make_constructor_caller(self, name, data):
         self.__dict__[name] = contractCreator(name, data, self.metadata, self.code, self.substrate)
 

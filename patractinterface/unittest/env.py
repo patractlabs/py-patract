@@ -13,7 +13,7 @@ class SubstrateTestEnv:
         self.thread = None
 
         self.name = f'test_{self.type_def}_{self.port}'
-        args = " --name {} --tmp --ws-port {}".format(self.name, self.port)
+        args = " --name {} --tmp -lruntime=debug --ws-port {}".format(self.name, self.port)
         if type_def != 'europa':
             args += ' --dev'
         self.cmd = self.type_def + args
@@ -56,3 +56,9 @@ class SubstrateTestEnv:
 
         if self.type_def == 'europa':
             return 'default'
+
+    def types(self) -> dict:
+        if self.type_def == 'canvas':
+            return {'types': {"Address": "AccountId", "LookupSource": "AccountId"}}
+        if self.type_def == 'europa':
+            return {'types': {'LookupSource': 'MultiAddress'}}

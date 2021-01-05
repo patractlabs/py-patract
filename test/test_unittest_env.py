@@ -21,7 +21,7 @@ class UnittestEnvTest(unittest.TestCase):
 
     def test_env_canvas(self):
         # init api
-        substrate=SubstrateInterface(url=self.env.url(), type_registry_preset=self.env.typ())
+        substrate=SubstrateInterface(url=self.env.url(), type_registry_preset=self.env.typ(), type_registry=self.env.types())
 
         alice = Keypair.create_from_uri('//Alice')
         bob = Keypair.create_from_uri('//Bob')

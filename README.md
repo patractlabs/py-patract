@@ -43,16 +43,19 @@ from patractinterface import ContractFactory, ContractAPI
 For Unittest, should install [europa](https://github.com/patractlabs/europa) at first.
 
 ```bash
+# install v1.0.0 europa to local
+cargo install europa --git=https://github.com/patractlabs/europa --tag=v1.0.0
+# check europa version
 europa --version
-europa 0.1.0-3f71403-x86_64-linux-gnu
 ```
 
 All of test pased by europa environment.
 
-Install `pytest` to run test:
+Install `pytest` and `executor` to run test:
 
 ```bash
 pip3 install pytest
+pip3 install executor
 pytest ./test --log-cli-level info 
 ```
 
@@ -270,7 +273,7 @@ class UnittestEnvTest(unittest.TestCase):
         cls.env = SubstrateTestEnv.create_europa(port=39944)
         cls.env.start_node()
 
-        cls.api = SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
+        cls.api = SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ(), type_registry=cls.env.types())
         cls.alice = Keypair.create_from_uri('//Alice')
         cls.bob = Keypair.create_from_uri('//Bob')
 

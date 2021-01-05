@@ -20,7 +20,7 @@ class ContractSubscriberTestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.env = SubstrateTestEnv.create_europa(port=39944)
         cls.env.start_node()
-        substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
+        substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ(), type_registry=cls.env.types())
 
         cls.subscriber = SubstrateSubscriber(substrate)
         cls.substrate = substrate

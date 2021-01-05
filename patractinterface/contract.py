@@ -93,6 +93,10 @@ class ContractAPI:
         metadata = ContractMetadata.create_from_file(metadata_file, substrate=substrate)
         return cls(contract_address=contract_address, metadata=metadata, substrate=substrate)
 
+    @property
+    def address(self):
+        return self.contract_address
+
     def _make_exec_caller(self, name, data):
         logging.debug(f'exec {name} --> {data}')
         self.__dict__[name] = contractExecutor(name, data, self.contract_address, self.metadata, self.substrate)

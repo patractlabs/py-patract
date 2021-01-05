@@ -27,7 +27,7 @@ class SubstrateTestEnv:
     def create_europa(cls, port=9944):
         return cls(type_def='europa', port=port)
 
-    def startNode(self):
+    def start_node(self):
         logging.info("run cmd {}".format(self.cmd))
 
         def loggerThread():
@@ -40,10 +40,10 @@ class SubstrateTestEnv:
 
         time.sleep(3) # for startup
 
-        logging.info("startNode {}".format(self.name))
+        logging.info("start_node {}".format(self.name))
         return
 
-    def stopNode(self):
+    def stop_node(self):
         self.ec.kill()
         return
 

@@ -14,12 +14,12 @@ from patractinterface.contract import ContractAPI, ContractFactory
 class ContractSubscriberTestCase(unittest.TestCase):
     @classmethod
     def tearDown(cls):
-        cls.env.stopNode()
+        cls.env.stop_node()
 
     @classmethod
     def setUp(cls):
         cls.env = SubstrateTestEnv.create_europa(port=39944)
-        cls.env.startNode()
+        cls.env.start_node()
         substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
 
         cls.subscriber = SubstrateSubscriber(substrate)
@@ -39,7 +39,7 @@ class ContractSubscriberTestCase(unittest.TestCase):
             metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
         )
 
-        erc20.putAndDeploy(self.alice, 1000000 * (10 ** 15))
+        erc20.put_and_deploy(self.alice, 1000000 * (10 ** 15))
 
         api = ContractAPI(erc20.contract_address, contract_metadata, self.substrate)
         alice_balance_old = api.balance_of(self.bob, self.alice.ss58_address)

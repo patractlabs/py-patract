@@ -39,7 +39,7 @@ class ERC20:
         metadata = ContractMetadata.create_from_file(metadata_file, substrate=substrate)
         return cls(address="", metadata=metadata, substrate=substrate, code=code)
 
-    def putAndDeploy(self, keypair: Keypair, initial_supply, endowment=10**15, gas_limit=1000000000000):
+    def put_and_deploy(self, keypair: Keypair, initial_supply, endowment=10**15, gas_limit=1000000000000):
         receipt = self.code.upload_wasm(keypair)
         if receipt.is_succes:
             logging.debug("erc20 code deploy success")
@@ -74,11 +74,11 @@ class ERC20:
         }
         return self.instance.exec(keypair, "transfer", args, value=value, gas_limit=gas_limit)
 
-    def transferFrom(self, keypair: Keypair, fromAcc, toAcc, amt, value = 0, gas_limit = 100000000000):
+    def transfer_from(self, keypair: Keypair, from_acc, to_acc, amt, value = 0, gas_limit = 100000000000):
         self.check_address()
         args = {
-            "from" : fromAcc,
-            "to" : toAcc,
+            "from" : from_acc,
+            "to" : to_acc,
             "value" : amt,
         }
         return self.instance.exec(keypair, "transfer_from", args, value=value, gas_limit=gas_limit)
@@ -91,7 +91,7 @@ class ERC20:
         }
         return self.instance.exec(keypair, "approve", args, value=value, gas_limit=gas_limit)
 
-    def balanceOf(self, owner: str):
+    def balance_of(self, owner: str):
         self.check_address()
         args = {
             "owner" : owner

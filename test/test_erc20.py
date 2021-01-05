@@ -12,13 +12,13 @@ class ERC20TestCase(unittest.TestCase):
 
     @classmethod
     def tearDown(cls):
-        cls.env.stopNode()
+        cls.env.stop_node()
 
     @classmethod
     def setUpClass(cls):
         logging.info("init deplay")
         cls.env = SubstrateTestEnv.create_europa(port=39944)
-        cls.env.startNode()
+        cls.env.start_node()
         cls.substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
 
         cls.contract_metadata = ContractMetadata.create_from_file(
@@ -33,7 +33,7 @@ class ERC20TestCase(unittest.TestCase):
         cls.alice = Keypair.create_from_uri('//Alice')
         cls.bob = Keypair.create_from_uri('//Bob')
 
-        cls.erc20.putAndDeploy(cls.alice, 1000000 * (10 ** 15))
+        cls.erc20.put_and_deploy(cls.alice, 1000000 * (10 ** 15))
 
     def transfer(self):
         supply = self.erc20.totalSupply()
@@ -43,10 +43,10 @@ class ERC20TestCase(unittest.TestCase):
         self.assertTrue(res.is_succes)
         self.check_balance_of(self.bob.ss58_address, 10000)
 
-    def transferFrom(self):
-        res = self.erc20.transferFrom(self.alice,
-            fromAcc=self.alice.ss58_address, 
-            toAcc=self.bob.ss58_address, 
+    def transfer_from(self):
+        res = self.erc20.transfer_from(self.alice,
+            from_acc=self.alice.ss58_address, 
+            to_acc=self.bob.ss58_address, 
             amt=10000)
         self.assertTrue(res.is_succes)
 
@@ -57,13 +57,13 @@ class ERC20TestCase(unittest.TestCase):
         self.assertEqual(allowance, 10000)
 
     def check_balance_of(self, acc, value):
-        res = self.erc20.balanceOf(acc)
+        res = self.erc20.balance_of(acc)
         self.assertEqual(res, value)
 
     def test_exec_and_read(self):
         self.transfer()
         self.approve()
-        self.transferFrom()
+        self.transfer_from()
 
 if __name__ == '__main__':
     unittest.main()

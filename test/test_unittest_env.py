@@ -13,11 +13,11 @@ class UnittestEnvTest(unittest.TestCase):
     @classmethod
     def setUp(cls):
         cls.env = SubstrateTestEnv.create_europa(port=39944)
-        cls.env.startNode()
+        cls.env.start_node()
         return
 
     def tearDown(cls):
-        cls.env.stopNode()
+        cls.env.stop_node()
 
     def test_env_canvas(self):
         # init api
@@ -34,11 +34,11 @@ class UnittestEnvTest(unittest.TestCase):
         )
 
         # deplay a erc20 contract
-        erc20.putAndDeploy(alice, 1000000 * (10 ** 15))
+        erc20.put_and_deploy(alice, 1000000 * (10 ** 15))
 
-        erc20.transferFrom(alice,
-            fromAcc=alice.ss58_address, 
-            toAcc=bob.ss58_address, 
+        erc20.transfer_from(alice,
+            from_acc=alice.ss58_address, 
+            to_acc=bob.ss58_address, 
             amt=10000)
 
         erc20.transfer(alice, bob.ss58_address, 10000)

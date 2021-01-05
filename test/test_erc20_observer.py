@@ -13,14 +13,14 @@ from patractinterface.contracts.erc20 import ERC20, ERC20Observer
 class ERC20ObserverTestCase(unittest.TestCase):
     @classmethod
     def tearDown(cls):
-        cls.env.stopNode()
+        cls.env.stop_node()
 
     @classmethod
     def setUpClass(cls):
         logging.info("init deplay")
 
         cls.env = SubstrateTestEnv.create_europa(port=39944)
-        cls.env.startNode()
+        cls.env.start_node()
         cls.substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
 
         cls.contract_metadata = ContractMetadata.create_from_file(
@@ -36,7 +36,7 @@ class ERC20ObserverTestCase(unittest.TestCase):
         cls.alice = Keypair.create_from_uri('//Alice')
         cls.bob = Keypair.create_from_uri('//Bob')
 
-        cls.erc20.putAndDeploy(cls.alice, 1000000 * (10 ** 15))
+        cls.erc20.put_and_deploy(cls.alice, 1000000 * (10 ** 15))
 
         cls.observer = ERC20Observer.create_from_address(
             substrate = cls.substrate, 
@@ -46,9 +46,9 @@ class ERC20ObserverTestCase(unittest.TestCase):
 
     def test_watch(self):
         self.erc20.transfer(self.alice, self.bob.ss58_address, 10000)
-        self.erc20.transferFrom(self.alice,
-            fromAcc=self.alice.ss58_address, 
-            toAcc=self.bob.ss58_address, 
+        self.erc20.transfer_from(self.alice,
+            from_acc=self.alice.ss58_address, 
+            to_acc=self.bob.ss58_address, 
             amt=10000)
         self.erc20.approve(self.alice, spender=self.bob.ss58_address, amt=10000)
         self.erc20.transfer(self.alice, self.bob.ss58_address, 100000)

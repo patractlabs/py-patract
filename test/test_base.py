@@ -14,12 +14,12 @@ evt_getted = 0
 class ContractSubscriberTestCase(unittest.TestCase):
     @classmethod
     def tearDown(cls):
-        cls.env.stopNode()
+        cls.env.stop_node()
 
     @classmethod
     def setUpClass(cls):
         cls.env = SubstrateTestEnv.create_europa(port=39944)
-        cls.env.startNode()
+        cls.env.start_node()
         substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
 
         cls.subscriber = SubstrateSubscriber(substrate)

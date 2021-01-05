@@ -150,21 +150,21 @@ erc20 = ERC20.create_from_contracts(
 )
 
 # deplay a erc20 contract
-erc20.putAndDeploy(alice, 1000000 * (10 ** 15))
+erc20.put_and_deploy(alice, 1000000 * (10 ** 15))
 
 # read total supply
 total_supply = erc20.totalSupply()
 
 # transfer
-erc20.transferFrom(alice,
-    fromAcc=alice.ss58_address, 
-    toAcc=bob.ss58_address, 
+erc20.transfer_from(alice,
+    from_acc=alice.ss58_address, 
+    to_acc=bob.ss58_address, 
     amt=10000)
 
 erc20.transfer(alice, bob.ss58_address, 10000)
 
 # get balance
-alice_balance = erc20.balanceOf(alice.ss58_address)
+alice_balance = erc20.balance_of(alice.ss58_address)
 
 # approve
 erc20.approve(alice, spender=bob.ss58_address, amt=10000)
@@ -233,7 +233,7 @@ class UnittestEnvTest(unittest.TestCase):
     def setUp(cls):
         # start env or use canvas for a 6s block
         cls.env = SubstrateTestEnv.create_europa(port=39944)
-        cls.env.startNode()
+        cls.env.start_node()
 
         cls.api = SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
         cls.alice = Keypair.create_from_uri('//Alice')
@@ -244,17 +244,17 @@ class UnittestEnvTest(unittest.TestCase):
             contract_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
             metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
         )
-        cls.erc20.putAndDeploy(alice, 1000000 * (10 ** 15))
+        cls.erc20.put_and_deploy(alice, 1000000 * (10 ** 15))
 
         return
 
     def tearDown(cls):
-        cls.env.stopNode()
+        cls.env.stop_node()
 
     def test_transfer(self):
-        self.erc20.transferFrom(alice,
-            fromAcc=alice.ss58_address, 
-            toAcc=bob.ss58_address, 
+        self.erc20.transfer_from(alice,
+            from_acc=alice.ss58_address, 
+            to_acc=bob.ss58_address, 
             amt=10000)
         # some more test case
 

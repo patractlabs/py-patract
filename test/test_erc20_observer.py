@@ -21,7 +21,7 @@ class ERC20ObserverTestCase(unittest.TestCase):
 
         cls.env = SubstrateTestEnv.create_europa(port=39944)
         cls.env.start_node()
-        cls.substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ())
+        cls.substrate=SubstrateInterface(url=cls.env.url(), type_registry_preset=cls.env.typ(), type_registry=cls.env.types())
 
         cls.contract_metadata = ContractMetadata.create_from_file(
             metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json'),

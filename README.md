@@ -36,6 +36,68 @@ As [polkascan's Python Substrate Interface](https://github.com/polkascan/py-subs
 - `SubstrateSubscriber` is a subscriber support to subscribe data changes in chain, for example, the events in chain.
 - `get_contract_event_type` add event decode support for contracts.
 
+we add api by metadata for Contract,  api will auto generate caller for contract from metadata:
+
+```python
+# create a ContractAPI
+api = ContractAPI(self.erc20.contract_address, self.contract_metadata, self.substrate)
+
+# api will auto generate caller for contract from metadata
+alice_balance_old = api.balance_of(self.bob, self.alice.ss58_address)
+
+res = api.transfer(self.alice, self.bob.ss58_address, 100000, gas_limit=20000000000)
+logging.info(f'transfer res {res.error_message}')
+self.assertTrue(res.is_succes)
+
+alice_balance = api.balance_of(self.bob, self.alice.ss58_address)
+logging.info(f'transfer alice_balance {alice_balance}')
+
+bob_balance = api.balance_of(self.bob, self.bob.ss58_address)
+logging.info(f'transfer bob_balance {bob_balance}')
+```
+
+The api will generate exec and read api from metadata file, for example:
+
+```json
+      {
+        "args": [
+          {
+            "name": "owner",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [
+          " Returns the account balance for the specified `owner`.",
+          "",
+          " Returns `0` if the account is non-existent."
+        ],
+        "mutates": false,
+        "name": [
+          "balance_of"
+        ],
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "Balance"
+          ],
+          "type": 1
+        },
+        "selector": "0x56e929b2"
+      },
+```
+
+In api, can call by:
+
+```python
+bob_balance = api.balance_of(self.bob, self.bob.ss58_address)
+logging.info(f'transfer bob_balance {bob_balance}')
+```
+
 ## ContractObserver
 
 ContractObserver can observer events for a contract:

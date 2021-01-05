@@ -20,6 +20,24 @@ PatractPy will achieve the following support:
 - Provide a SDK development example for ERC20 contract
 - Support For unittest to canvas or [europa](https://github.com/patractlabs/europa) env.
 
+## Usage
+
+The sdk is in [https://pypi.org/project/patract-interface/0.1.2/](https://pypi.org/project/patract-interface/0.1.2/)
+
+install package:
+
+```bash
+pip3 install -U patract-interface 
+```
+
+use in python:
+
+```python
+from patractinterface import ContractFactory, ContractAPI
+
+... So something ...
+```
+
 ## Test
 
 For Unittest, should install [europa](https://github.com/patractlabs/europa) at first.

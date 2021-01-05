@@ -14,7 +14,6 @@ from substrateinterface.constants import *
 class ContractMessageArgError(ValueError):
     pass
 
-
 class contractExecutor:
     def __init__(self, name, data, contract_address: str, metadata: ContractMetadata = None, substrate: SubstrateInterface = None):
         self.substrate = substrate
@@ -84,9 +83,6 @@ class ContractAPI:
         self.contract_address = contract_address
         self.metadata = metadata
         self.event_decoder_typ = get_contract_event_type(metadata)
-
-        self.caller = {}
-        self._constructors_data = {}
         self._execs_data = {}
         self._reads_data = {}
         self._make_messages()
@@ -101,13 +97,11 @@ class ContractAPI:
         logging.debug(f'exec {name} --> {data}')
         self.__dict__[name] = contractExecutor(name, data, self.contract_address, self.metadata, self.substrate)
 
-
     def _make_read_caller(self, name, data):
         logging.debug(f'read {name} --> {data}')
         self.__dict__[name] = contractReader(name, data, self.contract_address, self.metadata, self.substrate)
 
     def _make_messages(self):
-        constructors = self.metadata.metadata_dict['spec']['constructors']
         messages = self.metadata.metadata_dict['spec']['messages']
 
         for m in messages:
@@ -124,3 +118,74 @@ class ContractAPI:
         
         for n in self._reads_data:
             self._make_read_caller(n, self._reads_data[n])
+
+class contractCreator:
+    def __init__(self, name, data, metadata: ContractMetadata = None, code: ContractCode = None, substrate: SubstrateInterface = None):
+        self.substrate = substrate
+        self.metadata = metadata
+        self.code = code
+        self.name = name
+        self.data = data
+
+    def __call__(self, *args, **kwargs):
+        logging.debug(f'args {args}')
+        
+        if (len(self.data['args']) + 1) != len(args):
+            raise ContractMessageArgError(f'exec args num error: export {len(self.data.args)}, got {len(args) - 1}')
+
+        call_args = {}
+        for i in range(0, len(self.data['args'])):
+            arg_name = self.data['args'][i]['name']
+            call_args[arg_name] = args[i + 1]
+
+        gas_limit = 200000
+        if 'gas_limit' in kwargs:
+            gas_limit = kwargs['gas_limit']
+
+        endowment = 0
+        if 'endowment' in kwargs:
+            endowment = kwargs['endowment']
+
+        deployment_salt = None
+        if 'deployment_salt' in kwargs:
+            deployment_salt = kwargs['deployment_salt']
+
+        logging.debug(f'args to call {call_args} {gas_limit}')
+        res = self.code.deploy(keypair=args[0], endowment=endowment, gas_limit=gas_limit,
+            constructor=self.name, args=call_args,  deployment_salt=deployment_salt)
+
+        return ContractAPI(res.contract_address, self.metadata, self.substrate)
+
+class ContractFactory:
+    def __init__(self, metadata: ContractMetadata = None, substrate: SubstrateInterface = None, code: ContractCode = None):
+        self.substrate = substrate
+        self.contract_address = None
+        self.metadata = metadata
+        self.code = code
+        self._constructors_data = {}
+        self._make_messages()
+
+    @classmethod
+    def create_from_file(cls, code_file: str, metadata_file: str, substrate: SubstrateInterface = None):
+        metadata = ContractMetadata.create_from_file(metadata_file, substrate=substrate)
+        code = ContractCode.create_from_contract_files(code_file, metadata_file, substrate)
+        return cls(code=code, metadata=metadata, substrate=substrate)
+
+    def put_code(self, keypair):
+        return self.code.upload_wasm(keypair)
+
+    @property
+    def address(self):
+        return self.contract_address
+
+    def _make_constructor_caller(self, name, data):
+        self.__dict__[name] = contractCreator(name, data, self.metadata, self.code, self.substrate)
+
+    def _make_messages(self):
+        constructors = self.metadata.metadata_dict['spec']['constructors']
+        for c in constructors:
+            if len(c['name']) == 1:
+                self._constructors_data[c['name'][0]] = c
+
+        for c in self._constructors_data:
+            self._make_constructor_caller(c, self._constructors_data[c])

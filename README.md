@@ -116,15 +116,15 @@ As [polkascan's Python Substrate Interface](https://github.com/polkascan/py-subs
 The basic api split into 2 parts:
 - Contract, include:
   - contractExecutor: This api could construct an extrinsic to call a contract, would be packed into a block and change state.
-  - contractReader: This api could constract a rpc request to call a contract, do not pack into a block and do not change any state.
+  - contractReader: This api could construct a rpc request to call a contract, do not pack into a block and do not change any state.
   - contractCreator: This api is used for `instantiate` a contract and holding the WASM code and metadata, receive following parameters:
     - `gas_limit`
     - `endowment`
     - `deployment_salt` (`salt` parameter in `instantiate`)
-  - ContractAPI: This api is used for `call` a contract, is a warpper for `contractExecutor` and `contractReader`, developers could use this api to react with contracts. This api could create a instance depends on the metadata, auto generate the contract access functions based on the contract. And the auto-gen functions receive the parameters which defined in contracts, besides receive following common parameters:
+  - ContractAPI: This api is used for `call` a contract, is a wrapper for `contractExecutor` and `contractReader`, developers could use this api to react with contracts. This api could create a instance depends on the metadata, auto generate the contract access functions based on the contract. And the auto-gen functions receive the parameters which defined in contracts, besides receive following common parameters:
     - `gas_limit`
     - `value` (notice, if current call's `payable` is false, this `value` must be `0`)
-  - ContractFactory: This api is used for constructing a contract instance in python, and developer could use this instrace to access contract. This is a wrapper for `contractCreator` and `ContractAPI`
+  - ContractFactory: This api is used for constructing a contract instance in python, and developer could use this instance to access contract. This is a wrapper for `contractCreator` and `ContractAPI`
 - Observer, include:
   - ContractObserver: This api is used for listen the events in contracts. 
 

@@ -91,7 +91,7 @@ For Unittest, should install [europa](https://github.com/patractlabs/europa) at 
 
 ```bash
 # install v1.0.0 europa to local
-cargo install europa --git=https://github.com/patractlabs/europa --tag=v1.0.0
+cargo install europa --git=https://github.com/patractlabs/europa --tag=v1.0.0 --force --locked
 # check europa version
 europa --version
 ```

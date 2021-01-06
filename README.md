@@ -91,7 +91,7 @@ For Unittest, should install [europa](https://github.com/patractlabs/europa) at 
 
 ```bash
 # install v1.0.0 europa to local
-cargo install europa --git=https://github.com/patractlabs/europa --tag=v1.0.0
+cargo install europa --git=https://github.com/patractlabs/europa --tag=v1.0.0 --force --locked
 # check europa version
 europa --version
 ```
@@ -113,40 +113,60 @@ As [polkascan's Python Substrate Interface](https://github.com/polkascan/py-subs
 - `SubstrateSubscriber` is a subscriber support to subscribe data changes in chain, for example, the events in chain.
 - `get_contract_event_type` add event decode support for contracts.
 
+The basic api split into 2 parts:
+- Contract, include:
+  - contractExecutor: This api could construct an extrinsic to call a contract, would be packed into a block and change state.
+  - contractReader: This api could constract a rpc request to call a contract, do not pack into a block and do not change any state.
+  - contractCreator: This api is used for `instantiate` a contract and holding the WASM code and metadata, receive following parameters:
+    - `gas_limit`
+    - `endowment`
+    - `deployment_salt` (`salt` parameter in `instantiate`)
+  - ContractAPI: This api is used for `call` a contract, is a warpper for `contractExecutor` and `contractReader`, developers could use this api to react with contracts. This api could create a instance depends on the metadata, auto generate the contract access functions based on the contract. And the auto-gen functions receive the parameters which defined in contracts, besides receive following common parameters:
+    - `gas_limit`
+    - `value` (notice, if current call's `payable` is false, this `value` must be `0`)
+  - ContractFactory: This api is used for constructing a contract instance in python, and developer could use this instrace to access contract. This is a wrapper for `contractCreator` and `ContractAPI`
+- Observer, include:
+  - ContractObserver: This api is used for listen the events in contracts. 
+
+All methods which belong to the instance of `ContractAPI` and `ContractFactory` **receive a keypair as the first parameter**, as the sender for this operation. And from the second parameter, receive the parameters defined in contracts.
+
+### `ContractFactory` and `ContractAPI` is used to react with contracts
 we add a factory to put code and deploy contracts to chain:
 
 ```python
 factory = ContractFactory.create_from_file(
-    substrate= self.substrate, 
-    code_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
-    metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
+    substrate=substrate, 
+    code_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
+    metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
 )
 
-res = factory.put_code(self.alice)
-self.assertTrue(res.is_succes)
+res = factory.put_code(alice) # alice is the keypair for `//Alice`
+print(res.is_succes)
 
-api = factory.new(self.alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
+# this api is `ContractAPI`
+api = factory.new(alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
+print(api.contract_address) # contract_address is the deployed contract
 ```
 
 The factory will generate constructors from metadata file.
 
-we add api by metadata for Contract,  api will auto generate caller for contract from metadata:
+We add api by metadata for Contract, api will auto generate caller for contract from metadata:
 
 ```python
-# create a ContractAPI
-api = ContractAPI(self.erc20.contract_address, self.contract_metadata, self.substrate)
+# create a ContractAPI from an existed contract address
+api = ContractAPI(contract_address, contract_metadata, substrate)
 
 # api will auto generate caller for contract from metadata
-alice_balance_old = api.balance_of(self.bob, self.alice.ss58_address)
+alice_balance_old = api.balance_of(bob, alice.ss58_address) # bob is the keypair for `//Bob`
 
-res = api.transfer(self.alice, self.bob.ss58_address, 100000, gas_limit=20000000000)
+res = api.transfer(alice, bob.ss58_address, 100000, gas_limit=20000000000)
 logging.info(f'transfer res {res.error_message}')
-self.assertTrue(res.is_succes)
+print(res.is_succes)
 
-alice_balance = api.balance_of(self.bob, self.alice.ss58_address)
+alice_balance = api.balance_of(bob, alice.ss58_address)
 logging.info(f'transfer alice_balance {alice_balance}')
 
-bob_balance = api.balance_of(self.bob, self.bob.ss58_address)
+bob_balance = api.balance_of(bob, bob.ss58_address)
 logging.info(f'transfer bob_balance {bob_balance}')
 ```
 
@@ -188,11 +208,11 @@ The api will generate exec and read api from metadata file, for example:
 In api, can call by:
 
 ```python
-bob_balance = api.balance_of(self.bob, self.bob.ss58_address)
+bob_balance = api.balance_of(bob, bob.ss58_address)
 logging.info(f'transfer bob_balance {bob_balance}')
 ```
 
-## ContractObserver
+### `ContractObserver` is used to listen contracts events
 
 ContractObserver can observer events for a contract:
 
@@ -204,13 +224,14 @@ contract_metadata = ContractMetadata.create_from_file(
 )
 observer = ContractObserver("0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48", contract_metadata, substrate)
 
-# for some handlers
+# for some handlers (callbacks)
 observer.scanEvents()
 ```
 
 The handler function can take the erc20 support as a example.
 
-## ERC20 API
+## Special case: ERC20 API
+Except react contract by `ContractAPI`, developers could create the wrapper by themself to react with corresponding contract. `py-contract` create an `ERC20 API` as an example to show this.
 
 ERC20 api provide a wapper to erc20 contract exec, read and observer events, it can be a example for contracts api calling.
 

@@ -58,5 +58,5 @@ class ContractNormalTestCase(unittest.TestCase):
         observer.scanEvents(handlers={
             'Transfer': on_transfer,
             'Approve': on_approval
-        })
+        }, to_num=2)
 

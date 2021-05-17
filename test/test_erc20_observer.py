@@ -36,7 +36,7 @@ class ERC20ObserverTestCase(unittest.TestCase):
         cls.alice = Keypair.create_from_uri('//Alice')
         cls.bob = Keypair.create_from_uri('//Bob')
 
-        cls.erc20.put_and_deploy(cls.alice, 1000000 * (10 ** 15))
+        cls.erc20.instantiate_with_code(cls.alice, 1000000 * (10 ** 15))
 
         cls.observer = ERC20Observer.create_from_address(
             substrate = cls.substrate, 

@@ -39,14 +39,14 @@ class ContractSubscriberTestCase(unittest.TestCase):
             metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
         )
 
-        erc20.put_and_deploy(self.alice, 1000000 * (10 ** 15))
+        erc20.instantiate_with_code(self.alice, 1000000 * (10 ** 15))
 
         api = ContractAPI(erc20.contract_address, contract_metadata, self.substrate)
         alice_balance_old = api.balance_of(self.bob, self.alice.ss58_address)
 
         res = api.transfer(self.alice, self.bob.ss58_address, 100000, gas_limit=20000000000)
         logging.info(f'transfer res {res.error_message}')
-        self.assertTrue(res.is_succes)
+        self.assertTrue(res.is_success)
 
         alice_balance = api.balance_of(self.bob, self.alice.ss58_address)
         logging.info(f'transfer alice_balance {alice_balance}')
@@ -64,16 +64,13 @@ class ContractSubscriberTestCase(unittest.TestCase):
             metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
         )
 
-        res = factory.put_code(self.alice)
-        self.assertTrue(res.is_succes)
-
         api = factory.new(self.alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
 
         alice_balance_old = api.balance_of(self.bob, self.alice.ss58_address)
 
         res = api.transfer(self.alice, self.bob.ss58_address, 100000, gas_limit=20000000000)
         logging.info(f'transfer res {res.error_message}')
-        self.assertTrue(res.is_succes)
+        self.assertTrue(res.is_success)
 
         alice_balance = api.balance_of(self.bob, self.alice.ss58_address)
         logging.info(f'transfer alice_balance {alice_balance}')

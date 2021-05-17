@@ -41,7 +41,7 @@ class ERC20:
 
     def put_and_deploy(self, keypair: Keypair, initial_supply, endowment=10**15, gas_limit=1000000000000):
         receipt = self.code.upload_wasm(keypair)
-        if receipt.is_succes:
+        if receipt.is_success:
             logging.debug("erc20 code deploy success")
 
             for event in receipt.triggered_events:
@@ -61,6 +61,20 @@ class ERC20:
         else:
             logging.error("deploy erc20 token error {}".format(receipt.error_message))
             raise DeployContractFailedException(receipt.error_message)
+
+    def instantiate_with_code(self, keypair: Keypair, initial_supply, salt: str=None, endowment=10**15, gas_limit=1000000000000):
+        # Deploy contract
+        contract = self.code.deploy(
+            keypair=keypair, endowment=endowment, gas_limit=gas_limit,
+            constructor="new",
+            args={'initial_supply': initial_supply},
+            deployment_salt=salt, upload_code=True,
+        )
+
+        self.contract_address = contract.contract_address
+        logging.debug("deploy erc20 token {}".format(self.contract_address))
+
+        self.instance = ContractInstance(self.contract_address, self.metadata, self.substrate)
 
     def check_address(self):
         if self.contract_address == "":

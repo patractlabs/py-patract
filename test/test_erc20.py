@@ -33,14 +33,14 @@ class ERC20TestCase(unittest.TestCase):
         cls.alice = Keypair.create_from_uri('//Alice')
         cls.bob = Keypair.create_from_uri('//Bob')
 
-        cls.erc20.put_and_deploy(cls.alice, 1000000 * (10 ** 15))
+        cls.erc20.instantiate_with_code(cls.alice, 1000000 * (10 ** 15))
 
     def transfer(self):
         supply = self.erc20.totalSupply()
         self.assertEqual(supply, 1000000 * (10 ** 15))
 
         res = self.erc20.transfer(self.alice, self.bob.ss58_address, 10000)
-        self.assertTrue(res.is_succes)
+        self.assertTrue(res.is_success)
         self.check_balance_of(self.bob.ss58_address, 10000)
 
     def transfer_from(self):
@@ -48,11 +48,11 @@ class ERC20TestCase(unittest.TestCase):
             from_acc=self.alice.ss58_address, 
             to_acc=self.bob.ss58_address, 
             amt=10000)
-        self.assertTrue(res.is_succes)
+        self.assertTrue(res.is_success)
 
     def approve(self):
         res = self.erc20.approve(self.alice, spender=self.bob.ss58_address, amt=10000)
-        self.assertTrue(res.is_succes)
+        self.assertTrue(res.is_success)
         allowance = self.erc20.allowance(self.alice.ss58_address, self.bob.ss58_address)
         self.assertEqual(allowance, 10000)
 

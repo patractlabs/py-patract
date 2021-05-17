@@ -87,11 +87,7 @@ class ContractObserver:
 
     def scanEvents(self, from_num = None, to_num = None, handlers = None):
         def handlerContracts(num, evt):
-            if to_num != None and num > to_num:
-                logging.info("return by tonum")
-                return True
-
-            if evt['event_id'] != 'ContractExecution':
+            if evt['event_id'] != 'ContractEmitted':
                 return
 
             for p in evt['params']:
@@ -107,10 +103,14 @@ class ContractObserver:
                         if h is not None:
                             h(num, evtDecoded[keys[0]])
 
+            if to_num != None and num >= to_num:
+                logging.info("return by to_num")
+                return True
+
         return self.scanChainEvents(from_num, handlerContracts)
 
     def scanChainEvents(self, from_num = None, handler = None):
-        def result_handler(res):
+        def result_handler(res, update_nr, subscription_id):
             # Check if extrinsic is included and finalized
             if 'params' in res:
                 if res['method'] != 'state_storage':

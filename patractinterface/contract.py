@@ -156,7 +156,9 @@ class contractCreator:
 
         logging.debug(f'args to call {call_args} {gas_limit}')
         res = self.code.deploy(keypair=args[0], endowment=endowment, gas_limit=gas_limit,
-            constructor=self.name, args=call_args, deployment_salt=deployment_salt)
+            constructor=self.name, args=call_args,
+            deployment_salt=deployment_salt,
+            upload_code=True,)
 
         return ContractAPI(res.contract_address, self.metadata, self.substrate)
 

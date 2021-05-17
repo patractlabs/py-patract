@@ -32,22 +32,19 @@ class ContractNormalTestCase(unittest.TestCase):
             code_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
             metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
         )
-        # 2. upload code.
-        res = contract.put_code(self.alice)
-        self.assertTrue(res.is_succes)
 
-        # 3. after put code, developer could deploy the contract
+        # 2. after put code, developer could deploy the contract
         erc20_ins = contract.new(self.alice, 1000000 * (10 ** 15), endowment=2*10**10, gas_limit=20000000000, deployment_salt="0x12")
 
         logging.info(f"erc20 addr: {erc20_ins.contract_address}")
 
         observer = ContractObserver(erc20_ins.contract_address, erc20_ins.metadata, self.substrate)
-        # 4. do a transfer call for this contract
+        # 3. do a transfer call for this contract
         res = erc20_ins.transfer(self.alice, self.bob.ss58_address, 100000, gas_limit=20000000000)
         logging.info(f'transfer res {res.error_message}')
-        self.assertTrue(res.is_succes)
+        self.assertTrue(res.is_success)
 
-        # 4.1 define callback for events
+        # 4 define callback for events
         def on_transfer(num, evt):
             logging.info("on_transfer in {} : {} {} {}".format(num, evt['from'], evt['to'], evt['value']))
 

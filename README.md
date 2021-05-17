@@ -60,14 +60,14 @@ def main():
         )
     # upload code to chain directly
     res = contract.put_code(alice)
-    print("update code hash{} res:{}".format(contract.code_hash.hex(), res.is_succes))
+    print("update code hash{} res:{}".format(contract.code_hash.hex(), res.is_success))
     # 2. instantiate the uploaded code as a contract instance
     erc20_ins = contract.new(alice, 1000000 * (10 ** 15), endowment=2*10**10, gas_limit=20000000000, deployment_salt="0x12")
     # 2.1 create a observer to listen event
     observer = ContractObserver(erc20_ins.contract_address, erc20_ins.metadata, substrate)
     # 3. send a transfer call for this contract
     res = erc20_ins.transfer(alice, bob.ss58_address, 100000, gas_limit=20000000000)
-    print('transfer res', res.is_succes)
+    print('transfer res', res.is_success)
 
     def on_transfer(num, evt):
         print("on_transfer in {} : {} {} {}".format(num, evt['from'], evt['to'], evt['value']))
@@ -141,7 +141,7 @@ factory = ContractFactory.create_from_file(
 )
 
 res = factory.put_code(alice) # alice is the keypair for `//Alice`
-print(res.is_succes)
+print(res.is_success)
 
 # this api is `ContractAPI`
 api = factory.new(alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
@@ -161,7 +161,7 @@ alice_balance_old = api.balance_of(bob, alice.ss58_address) # bob is the keypair
 
 res = api.transfer(alice, bob.ss58_address, 100000, gas_limit=20000000000)
 logging.info(f'transfer res {res.error_message}')
-print(res.is_succes)
+print(res.is_success)
 
 alice_balance = api.balance_of(bob, alice.ss58_address)
 logging.info(f'transfer alice_balance {alice_balance}')
@@ -256,7 +256,7 @@ erc20 = ERC20.create_from_contracts(
 )
 
 # deplay a erc20 contract
-erc20.put_and_deploy(alice, 1000000 * (10 ** 15))
+erc20.instantiate_with_code(alice, 1000000 * (10 ** 15))
 
 # read total supply
 total_supply = erc20.totalSupply()
@@ -350,7 +350,7 @@ class UnittestEnvTest(unittest.TestCase):
             contract_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
             metadata_file= os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
         )
-        cls.erc20.put_and_deploy(alice, 1000000 * (10 ** 15))
+        cls.erc20.instantiate_with_code(alice, 1000000 * (10 ** 15))
 
         return
 

@@ -28,7 +28,7 @@ class ContractSubscriberTestCase(unittest.TestCase):
     #def setUp(self) -> None:
 
     def subscriber(self):
-        def result_handler(result):
+        def result_handler(result, update_nr, subscription_id):
             # Check if extrinsic is included and finalized
             logging.info("get res: {}".format(json.dumps(result)))
             global evt_getted 
@@ -57,7 +57,7 @@ class ContractSubscriberTestCase(unittest.TestCase):
             self.substrate.runtime_config)
         evtTransferArgs = decoder.decode()
         logging.debug("evtTransfer {}".format(evtTransferArgs))
-        self.assertEqual(evtTransferArgs, '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
+        self.assertEqual(evtTransferArgs, '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')
 
         type_data = get_contract_event_type(contract_metadata)
         logging.debug("type_event_data {}".format(type_data))
@@ -67,7 +67,7 @@ class ContractSubscriberTestCase(unittest.TestCase):
             self.substrate.runtime_config)
         evtTransfer1 = decoder.decode()
         self.assertEqual(evtTransfer1['Transfer']['from'], None)
-        self.assertEqual(evtTransfer1['Transfer']['to'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
+        self.assertEqual(evtTransfer1['Transfer']['to'], '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')
         self.assertEqual(evtTransfer1['Transfer']['value'], 1000000000000000000000)
 
         logging.debug("evtTransfer {}".format(evtTransfer1))
@@ -76,8 +76,8 @@ class ContractSubscriberTestCase(unittest.TestCase):
             ScaleBytes("0x0001d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d018eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a4810270000000000000000000000000000"),
             self.substrate.runtime_config)
         evtTransfer2 = decoder.decode()
-        self.assertEqual(evtTransfer2['Transfer']['from'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
-        self.assertEqual(evtTransfer2['Transfer']['to'], '0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48')
+        self.assertEqual(evtTransfer2['Transfer']['from'], '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')
+        self.assertEqual(evtTransfer2['Transfer']['to'], '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty')
         self.assertEqual(evtTransfer2['Transfer']['value'], 10000)
 
         logging.debug("evtTransfer2 {}".format(evtTransfer2))
@@ -87,8 +87,8 @@ class ContractSubscriberTestCase(unittest.TestCase):
             self.substrate.runtime_config)
         evtApprove1 = decoder.decode()
 
-        self.assertEqual(evtApprove1['Approval']['owner'], '0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d')
-        self.assertEqual(evtApprove1['Approval']['spender'], '0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48')
+        self.assertEqual(evtApprove1['Approval']['owner'], '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')
+        self.assertEqual(evtApprove1['Approval']['spender'], '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty')
         self.assertEqual(evtApprove1['Approval']['value'], 10000)
         logging.debug("evtApprove1 {}".format(evtApprove1))
 

@@ -170,8 +170,8 @@ setup(
         'py-ed25519-bindings>=0.1.2',
         'py-bip39-bindings>=0.1.6',
         'executor>=23.2',
-        'scalecodec>=0.10.42',
-        'substrate-interface>=0.11.8'
+        'scalecodec>=0.11.0',
+        'substrate-interface>=0.13.2'
     ],  # Optional
 
     # List additional groups of dependencies here (e.g. development

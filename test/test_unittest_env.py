@@ -34,7 +34,7 @@ class UnittestEnvTest(unittest.TestCase):
         )
 
         # deplay a erc20 contract
-        erc20.put_and_deploy(alice, 1000000 * (10 ** 15))
+        erc20.instantiate_with_code(alice, 1000000 * (10 ** 15))
 
         erc20.transfer_from(alice,
             from_acc=alice.ss58_address, 

@@ -22,7 +22,7 @@ PatractPy will achieve the following support:
 
 ## Usage
 
-The sdk is in [https://pypi.org/project/patract-interface/0.1.2/](https://pypi.org/project/patract-interface/0.1.2/)
+The sdk is in [https://pypi.org/project/patract-interface/0.3.1/](https://pypi.org/project/patract-interface/0.3.1/)
 
 install package:
 
@@ -58,9 +58,6 @@ def main():
             code_file= os.path.join(os.path.dirname(__file__), 'res', 'erc20.wasm'),
             metadata_file= os.path.join(os.path.dirname(__file__), 'res', 'erc20.json')
         )
-    # upload code to chain directly
-    res = contract.put_code(alice)
-    print("update code hash{} res:{}".format(contract.code_hash.hex(), res.is_success))
     # 2. instantiate the uploaded code as a contract instance
     erc20_ins = contract.new(alice, 1000000 * (10 ** 15), endowment=2*10**10, gas_limit=20000000000, deployment_salt="0x12")
     # 2.1 create a observer to listen event
@@ -134,18 +131,15 @@ All methods which belong to the instance of `ContractAPI` and `ContractFactory` 
 we add a factory to put code and deploy contracts to chain:
 
 ```python
-factory = ContractFactory.create_from_file(
-    substrate=substrate, 
-    code_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
-    metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
-)
+    factory = ContractFactory.create_from_file(
+        substrate=substrate, 
+        code_file=os.path.join(os.path.dirname(__file__), 'contract', 'erc20.wasm'),
+        metadata_file=os.path.join(os.path.dirname(__file__), 'contract', 'erc20.json')
+    )
 
-res = factory.put_code(alice) # alice is the keypair for `//Alice`
-print(res.is_success)
-
-# this api is `ContractAPI`
-api = factory.new(alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
-print(api.contract_address) # contract_address is the deployed contract
+    # this api is `ContractAPI`
+    api = factory.new(alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
+    print(api.contract_address) # contract_address is the deployed contract
 ```
 
 The factory will generate constructors from metadata file.

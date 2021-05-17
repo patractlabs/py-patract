@@ -131,15 +131,15 @@ All methods which belong to the instance of `ContractAPI` and `ContractFactory` 
 we add a factory to put code and deploy contracts to chain:
 
 ```python
-factory = ContractFactory.create_from_file(
-    substrate=substrate, 
-    code_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.wasm'),
-    metadata_file=os.path.join(os.path.dirname(__file__), 'constracts', 'ink', 'erc20.json')
-)
+    factory = ContractFactory.create_from_file(
+        substrate=substrate, 
+        code_file=os.path.join(os.path.dirname(__file__), 'contract', 'erc20.wasm'),
+        metadata_file=os.path.join(os.path.dirname(__file__), 'contract', 'erc20.json')
+    )
 
-# this api is `ContractAPI`
-api = factory.new(alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
-print(api.contract_address) # contract_address is the deployed contract
+    # this api is `ContractAPI`
+    api = factory.new(alice, 1000000 * (10 ** 15), endowment=10**15, gas_limit=1000000000000)
+    print(api.contract_address) # contract_address is the deployed contract
 ```
 
 The factory will generate constructors from metadata file.

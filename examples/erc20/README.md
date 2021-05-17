@@ -35,13 +35,13 @@ europa --tmp --dev
 Run examples:
 
 ```bash
-python3 ./examples/erc20/erc20.py 
+python3 ./examples/erc20/scan.py 
 ```
 
 If success will show:
 
 ```bash
-python3 ./examples/erc20/erc20.py 
+python3 ./examples/erc20/scan.py 
 transfer res True
 on_transfer in 1 : None 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY 1000000000000000000000
 on_transfer in 2 : 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY 5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty 100000

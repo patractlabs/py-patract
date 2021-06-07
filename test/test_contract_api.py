@@ -68,6 +68,10 @@ class ContractSubscriberTestCase(unittest.TestCase):
 
         alice_balance_old = api.balance_of(self.bob, self.alice.ss58_address)
 
+        total = api.total_supply()
+        logging.info(f'transfer total {total}')
+        self.assertEqual(total, 1000000 * (10 ** 15))
+
         res = api.transfer(self.alice, self.bob.ss58_address, 100000, gas_limit=20000000000)
         logging.info(f'transfer res {res.error_message}')
         self.assertTrue(res.is_success)

@@ -133,9 +133,13 @@ class contractCreator:
 
     def __call__(self, *args, **kwargs):
         logging.debug(f'args {args}')
+
+        args_len = 0
+        if self.data['args'] is not None:
+            args_len = len(self.data['args'])
         
-        if (len(self.data['args']) + 1) != len(args):
-            raise ContractMessageArgError(f'exec args num error: export {len(self.data.args)}, got {len(args) - 1}')
+        if (args_len + 1) != len(args):
+            raise ContractMessageArgError(f'exec args num error: export {args_len}, got {len(args) - 1}')
 
         call_args = {}
         for i in range(0, len(self.data['args'])):

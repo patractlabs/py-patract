@@ -24,13 +24,17 @@ class contractExecutor:
         self.instance = ContractInstance(contract_address, metadata, substrate)
 
     def __call__(self, *args, **kwargs):
-        logging.debug(f'args {args}')
+        logging.debug(f'exec args {args}')
         
-        if (len(self.data['args']) + 1) != len(args):
-            raise ContractMessageArgError(f'exec args num error: export {len(self.data.args)}, got {len(args) - 1}')
+        args_len = 0
+        if self.data['args'] is not None:
+            args_len = len(self.data['args'])
+        
+        if (args_len + 1) != len(args):
+            raise ContractMessageArgError(f'exec args num error: export {args_len}, got {len(args) - 1}')
 
         call_args = {}
-        for i in range(0, len(self.data['args'])):
+        for i in range(0, args_len):
             arg_name = self.data['args'][i]['name']
             call_args[arg_name] = args[i + 1]
 
@@ -57,13 +61,17 @@ class contractReader:
         self.instance = ContractInstance(contract_address, metadata, substrate)
 
     def __call__(self, *args, **kwargs):
-        logging.debug(f'args {args}')
-        
-        if (len(self.data['args']) + 1) != len(args):
-            raise ContractMessageArgError(f'exec args num error: export {len(self.data.args)}, got {len(args) - 1}')
+        logging.debug(f'read args {args}')
+
+        args_len = 0
+        if self.data['args'] is not None:
+            args_len = len(self.data['args'])
+
+        if (args_len + 1) != len(args):
+            raise ContractMessageArgError(f'read args num error: export {args_len}, got {len(args) - 1}')
 
         call_args = {}
-        for i in range(0, len(self.data['args'])):
+        for i in range(0, args_len):
             arg_name = self.data['args'][i]['name']
             call_args[arg_name] = args[i + 1]
 
@@ -132,7 +140,7 @@ class contractCreator:
         self.data = data
 
     def __call__(self, *args, **kwargs):
-        logging.debug(f'args {args}')
+        logging.debug(f'creator args {args}')
 
         args_len = 0
         if self.data['args'] is not None:
@@ -142,7 +150,7 @@ class contractCreator:
             raise ContractMessageArgError(f'exec args num error: export {args_len}, got {len(args) - 1}')
 
         call_args = {}
-        for i in range(0, len(self.data['args'])):
+        for i in range(0, args_len):
             arg_name = self.data['args'][i]['name']
             call_args[arg_name] = args[i + 1]
 

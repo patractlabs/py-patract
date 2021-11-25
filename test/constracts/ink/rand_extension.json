@@ -1,0 +1,216 @@
+{
+  "source": {
+    "hash": "0x3e2d1ac54cbf922eff8630368a285e09d3a1cb29a6c9119e0b6058e39be02bea",
+    "language": "ink! 3.0.0-rc6",
+    "compiler": "rustc 1.58.0-nightly"
+  },
+  "contract": {
+    "name": "rand_extension",
+    "version": "3.0.0-rc6",
+    "authors": [
+      "Parity Technologies <admin@parity.io>"
+    ]
+  },
+  "V1": {
+    "spec": {
+      "constructors": [
+        {
+          "args": [
+            {
+              "name": "init_value",
+              "type": {
+                "displayName": [],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [
+            "Constructor that initializes the `bool` value to the given `init_value`."
+          ],
+          "name": [
+            "new"
+          ],
+          "selector": "0x9bae9d5e"
+        },
+        {
+          "args": [],
+          "docs": [
+            "Constructor that initializes the `bool` value to `false`.",
+            "",
+            "Constructors may delegate to other constructors."
+          ],
+          "name": [
+            "default"
+          ],
+          "selector": "0xed4b9d1b"
+        }
+      ],
+      "docs": [],
+      "events": [
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "new",
+              "type": {
+                "displayName": [],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "name": "RandomUpdated"
+        }
+      ],
+      "messages": [
+        {
+          "args": [],
+          "docs": [
+            " Update the value from the runtimes random source."
+          ],
+          "mutates": true,
+          "name": [
+            "update"
+          ],
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 2
+          },
+          "selector": "0x5f234f5d"
+        },
+        {
+          "args": [],
+          "docs": [
+            " Simply returns the current value."
+          ],
+          "mutates": false,
+          "name": [
+            "get"
+          ],
+          "payable": false,
+          "returnType": {
+            "displayName": [],
+            "type": 1
+          },
+          "selector": "0x2f865bd9"
+        }
+      ]
+    },
+    "storage": {
+      "struct": {
+        "fields": [
+          {
+            "layout": {
+              "array": {
+                "cellsPerElem": 1,
+                "layout": {
+                  "cell": {
+                    "key": "0x2000000000000000000000000000000000000000000000000000000000000000",
+                    "ty": 0
+                  }
+                },
+                "len": 32,
+                "offset": "0x0000000000000000000000000000000000000000000000000000000000000000"
+              }
+            },
+            "name": "value"
+          }
+        ]
+      }
+    },
+    "types": [
+      {
+        "id": 0,
+        "type": {
+          "def": {
+            "primitive": "u8"
+          }
+        }
+      },
+      {
+        "id": 1,
+        "type": {
+          "def": {
+            "array": {
+              "len": 32,
+              "type": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 3
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 4
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 3
+            },
+            {
+              "name": "E",
+              "type": 4
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "type": {
+          "def": {
+            "tuple": []
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "FailGetRandomSource"
+                }
+              ]
+            }
+          },
+          "path": [
+            "rand_extension",
+            "RandomReadErr"
+          ]
+        }
+      }
+    ]
+  }
+}

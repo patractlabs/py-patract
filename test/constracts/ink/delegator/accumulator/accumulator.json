@@ -1,11 +1,11 @@
 {
   "source": {
-    "hash": "0x88af2390f1eb7c7adbf9bc726e454e94507995627e1e38d6df4d5071cc274849",
+    "hash": "0xf5d00b6cd1bf93773c0d111dcef790b47c741e46813e0489811251c1adfe2dba",
     "language": "ink! 3.0.0-rc6",
     "compiler": "rustc 1.58.0-nightly"
   },
   "contract": {
-    "name": "flipper",
+    "name": "accumulator",
     "version": "3.0.0-rc6",
     "authors": [
       "Parity Technologies <admin@parity.io>"
@@ -20,51 +20,51 @@
               "name": "init_value",
               "type": {
                 "displayName": [
-                  "bool"
+                  "i32"
                 ],
                 "type": 0
               }
             }
           ],
           "docs": [
-            "Creates a new flipper smart contract initialized with the given value."
+            "Initializes the value to the initial value."
           ],
           "name": [
             "new"
           ],
           "selector": "0x9bae9d5e"
-        },
-        {
-          "args": [],
-          "docs": [
-            "Creates a new flipper smart contract initialized to `false`."
-          ],
-          "name": [
-            "default"
-          ],
-          "selector": "0xed4b9d1b"
         }
       ],
       "docs": [],
       "events": [],
       "messages": [
         {
-          "args": [],
+          "args": [
+            {
+              "name": "by",
+              "type": {
+                "displayName": [
+                  "i32"
+                ],
+                "type": 0
+              }
+            }
+          ],
           "docs": [
-            " Flips the current value of the Flipper's boolean."
+            " Mutates the internal value."
           ],
           "mutates": true,
           "name": [
-            "flip"
+            "inc"
           ],
           "payable": false,
           "returnType": null,
-          "selector": "0x633aa551"
+          "selector": "0x1d32619f"
         },
         {
           "args": [],
           "docs": [
-            " Returns the current value of the Flipper's boolean."
+            " Returns the current state."
           ],
           "mutates": false,
           "name": [
@@ -73,7 +73,7 @@
           "payable": false,
           "returnType": {
             "displayName": [
-              "bool"
+              "i32"
             ],
             "type": 0
           },
@@ -101,7 +101,7 @@
         "id": 0,
         "type": {
           "def": {
-            "primitive": "bool"
+            "primitive": "i32"
           }
         }
       }

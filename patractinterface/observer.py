@@ -2,9 +2,11 @@ import os
 import logging
 import json
 
-from scalecodec.block import EventRecord, EventsDecoder, LogDigest, MetadataDecoder
-from scalecodec.metadata import MetadataV12Decoder
-from scalecodec.base import ScaleDecoder
+# from scalecodec.block import EventRecord, EventsDecoder, LogDigest, MetadataDecoder
+# from scalecodec.metadata import MetadataV12Decoder
+from scalecodec.type_registry import load_type_registry_preset
+from scalecodec.base import ScaleDecoder, RuntimeConfigurationObject
+# from scalecodec.base import ScaleDecoder
 from scalecodec import ScaleBytes, ScaleType, GenericContractExecResult
 from substrateinterface import SubstrateInterface, ContractMetadata, ContractCode, Keypair
 from substrateinterface.exceptions import SubstrateRequestException
@@ -42,12 +44,23 @@ class ContractObserver:
         return cls(contract_address=contract_address, metadata=metadata, substrate=substrate)
 
     def decode_event(self, metadata_decoder, data):
-        events_decoder = EventsDecoder(
-            data=ScaleBytes(data),
-            metadata=metadata_decoder,
-            runtime_config=self.substrate.runtime_config
+        # events_decoder = EventsDecoder(
+        #     data=ScaleBytes(data),
+        #     metadata=metadata_decoder,
+        #     runtime_config=self.substrate.runtime_config
+        # )
+        # events_decoder.decode()
+
+        runtime_config = RuntimeConfigurationObject()
+        # This types are all hardcoded types needed to decode metadata types
+        runtime_config.update_type_registry(load_type_registry_preset(name=metadata_decoder))
+
+        # Decode retrieved metadata from the RPC
+        events_decoder = runtime_config.create_scale_object(
+            'MetadataVersioned', data=ScaleBytes(data)
         )
         events_decoder.decode()
+
 
         return events_decoder
 

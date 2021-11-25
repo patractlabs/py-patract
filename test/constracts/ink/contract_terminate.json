@@ -1,52 +1,53 @@
 {
-  "metadataVersion": "0.1.0",
   "source": {
-    "hash": "0x2be6f717259852a5deea700ee699841fe514351c7cfa305c4d532b909aa7f8c2",
-    "language": "ink! 3.0.0-rc2",
-    "compiler": "rustc 1.49.0-nightly"
+    "hash": "0x95646611d2b62cbe817692db6624fdac839404d21d5ec5430de72ff7f4ac775c",
+    "language": "ink! 3.0.0-rc6",
+    "compiler": "rustc 1.58.0-nightly"
   },
   "contract": {
     "name": "contract_terminate",
-    "version": "3.0.0-rc1",
+    "version": "3.0.0-rc6",
     "authors": [
       "Parity Technologies <admin@parity.io>"
     ]
   },
-  "spec": {
-    "constructors": [
-      {
-        "args": [],
-        "docs": [
-          " Creates a new instance of this contract."
-        ],
-        "name": [
-          "new"
-        ],
-        "selector": "0xd183512b"
+  "V1": {
+    "spec": {
+      "constructors": [
+        {
+          "args": [],
+          "docs": [
+            "Creates a new instance of this contract."
+          ],
+          "name": [
+            "new"
+          ],
+          "selector": "0x9bae9d5e"
+        }
+      ],
+      "docs": [],
+      "events": [],
+      "messages": [
+        {
+          "args": [],
+          "docs": [
+            " Terminates with the caller as beneficiary."
+          ],
+          "mutates": true,
+          "name": [
+            "terminate_me"
+          ],
+          "payable": false,
+          "returnType": null,
+          "selector": "0x17feb370"
+        }
+      ]
+    },
+    "storage": {
+      "struct": {
+        "fields": []
       }
-    ],
-    "docs": [],
-    "events": [],
-    "messages": [
-      {
-        "args": [],
-        "docs": [
-          " Terminates with the caller as beneficiary."
-        ],
-        "mutates": true,
-        "name": [
-          "terminate_me"
-        ],
-        "payable": false,
-        "returnType": null,
-        "selector": "0x57cb720f"
-      }
-    ]
-  },
-  "storage": {
-    "struct": {
-      "fields": []
-    }
-  },
-  "types": []
+    },
+    "types": []
+  }
 }

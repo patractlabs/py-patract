@@ -1,11 +1,11 @@
 {
   "source": {
-    "hash": "0x2d8214d5a8b920fc351d2a186cd15e842f4bf4d35da8b210a46beaeabbea62bf",
+    "hash": "0x66f7b38626227ec7c880740904ae741d3a2dc09a5103f9913a75cbe2e2e02b9f",
     "language": "ink! 3.0.0-rc6",
     "compiler": "rustc 1.58.0-nightly"
   },
   "contract": {
-    "name": "erc20",
+    "name": "trait_erc20",
     "version": "3.0.0-rc6",
     "authors": [
       "Parity Technologies <admin@parity.io>"
@@ -63,7 +63,7 @@
             },
             {
               "docs": [],
-              "indexed": false,
+              "indexed": true,
               "name": "value",
               "type": {
                 "displayName": [
@@ -104,7 +104,7 @@
             },
             {
               "docs": [],
-              "indexed": false,
+              "indexed": true,
               "name": "value",
               "type": {
                 "displayName": [
@@ -129,6 +129,7 @@
           ],
           "mutates": false,
           "name": [
+            "BaseErc20",
             "total_supply"
           ],
           "payable": false,
@@ -138,7 +139,7 @@
             ],
             "type": 0
           },
-          "selector": "0xdb6375a8"
+          "selector": "0x8244a1ad"
         },
         {
           "args": [
@@ -159,6 +160,7 @@
           ],
           "mutates": false,
           "name": [
+            "BaseErc20",
             "balance_of"
           ],
           "payable": false,
@@ -168,7 +170,7 @@
             ],
             "type": 0
           },
-          "selector": "0x0f755a56"
+          "selector": "0x933ae3c8"
         },
         {
           "args": [
@@ -198,6 +200,7 @@
           ],
           "mutates": false,
           "name": [
+            "BaseErc20",
             "allowance"
           ],
           "payable": false,
@@ -207,7 +210,7 @@
             ],
             "type": 0
           },
-          "selector": "0x6a00165e"
+          "selector": "0x74a27ac8"
         },
         {
           "args": [
@@ -242,6 +245,7 @@
           ],
           "mutates": true,
           "name": [
+            "BaseErc20",
             "transfer"
           ],
           "payable": false,
@@ -251,7 +255,7 @@
             ],
             "type": 11
           },
-          "selector": "0x84a15da1"
+          "selector": "0xfa9833a3"
         },
         {
           "args": [
@@ -284,6 +288,7 @@
           ],
           "mutates": true,
           "name": [
+            "BaseErc20",
             "approve"
           ],
           "payable": false,
@@ -293,7 +298,7 @@
             ],
             "type": 11
           },
-          "selector": "0x681266a0"
+          "selector": "0x922e291f"
         },
         {
           "args": [
@@ -343,6 +348,7 @@
           ],
           "mutates": true,
           "name": [
+            "BaseErc20",
             "transfer_from"
           ],
           "payable": false,
@@ -352,7 +358,7 @@
             ],
             "type": 11
           },
-          "selector": "0x0b396f18"
+          "selector": "0x839f0263"
         }
       ]
     },
@@ -844,7 +850,7 @@
             }
           },
           "path": [
-            "erc20",
+            "trait_erc20",
             "erc20",
             "Error"
           ]

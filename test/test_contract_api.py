@@ -3,7 +3,7 @@ import unittest
 import logging
 import os
 
-from scalecodec import ScaleBytes, ScaleDecoder
+from scalecodec import ScaleBytes
 from substrateinterface import SubstrateInterface, ContractMetadata, ContractInstance, Keypair
 from substrateinterface.utils.ss58 import ss58_encode
 from patractinterface.base import SubstrateSubscriber, get_contract_event_type

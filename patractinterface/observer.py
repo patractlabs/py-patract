@@ -53,16 +53,54 @@ class ContractObserver:
 
         runtime_config = RuntimeConfigurationObject()
         # This types are all hardcoded types needed to decode metadata types
-        runtime_config.update_type_registry(load_type_registry_preset(name=metadata_decoder))
+        # runtime_config.update_type_registry(load_type_registry_preset(name="metadata_types"))
 
         # Decode retrieved metadata from the RPC
-        events_decoder = runtime_config.create_scale_object(
-            'MetadataVersioned', data=ScaleBytes(data)
+        # metadata = runtime_config.create_scale_object(
+        #     'MetadataVersioned', data=ScaleBytes(data)
+        # )
+        # metadata.decode()
+
+        # # Add the embedded type registry to the runtime config
+        # runtime_config.add_portable_registry(metadata)
+
+        system_pallet = [p for p in metadata_decoder.pallets if p['name'] == 'System'][0]
+        event_storage_function = [s for s in system_pallet['storage']['entries'] if s['name'] == "Events"][0]
+
+        
+        print("======================================1")
+        logging.debug(metadata_decoder)
+        print("======================================2")
+        logging.debug(data)
+        print("======================================")
+
+        logging.debug(system_pallet)
+
+        event = runtime_config.create_scale_object(
+            event_storage_function.get_value_type_string(), data=ScaleBytes(data), metadata=metadata_decoder
         )
-        events_decoder.decode()
+        
+        print("======================================")
+        print("======================================")
+        print("======================================")
+        print("======================================")
+        logging.debug(event)
+        print("======================================")
+        print("======================================")
+        print("======================================")
+        print("======================================")
+
+        # # This types are all hardcoded types needed to decode metadata types
+        # runtime_config.update_type_registry(load_type_registry_preset(name=metadata_decoder))
+
+        # # Decode retrieved metadata from the RPC
+        # events_decoder = runtime_config.create_scale_object(
+        #     'MetadataVersioned', data=ScaleBytes(data)
+        # )
+        # events_decoder.decode()
 
 
-        return events_decoder
+        return event.decode()
 
     def get_block_events(self, block_hash, metadata_decoder=None):
         """
@@ -102,6 +140,15 @@ class ContractObserver:
         def handlerContracts(num, evt):
             if evt['event_id'] != 'ContractEmitted':
                 return
+            print("======================================")
+            print()
+            print()
+            print()
+            logging.debug(evt)
+            print()
+            print()
+            print()
+            print("======================================")
 
             for p in evt['params']:
                 typ = p['type']

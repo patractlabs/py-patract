@@ -1,0 +1,191 @@
+{
+  "source": {
+    "hash": "0x162fce7372d8555653a52725d0d8b223abbad3e46719ed85ada5c892391afe36",
+    "language": "ink! 3.0.0-rc6",
+    "compiler": "rustc 1.58.0-nightly"
+  },
+  "contract": {
+    "name": "subber",
+    "version": "3.0.0-rc6",
+    "authors": [
+      "Parity Technologies <admin@parity.io>"
+    ]
+  },
+  "V1": {
+    "spec": {
+      "constructors": [
+        {
+          "args": [
+            {
+              "name": "accumulator",
+              "type": {
+                "displayName": [
+                  "AccumulatorRef"
+                ],
+                "type": 3
+              }
+            }
+          ],
+          "docs": [
+            "Creates a new `subber` from the given `accumulator`."
+          ],
+          "name": [
+            "new"
+          ],
+          "selector": "0x9bae9d5e"
+        }
+      ],
+      "docs": [],
+      "events": [],
+      "messages": [
+        {
+          "args": [
+            {
+              "name": "by",
+              "type": {
+                "displayName": [
+                  "i32"
+                ],
+                "type": 5
+              }
+            }
+          ],
+          "docs": [
+            " Decreases the `accumulator` value by some amount."
+          ],
+          "mutates": true,
+          "name": [
+            "dec"
+          ],
+          "payable": false,
+          "returnType": null,
+          "selector": "0xb5d7b4f0"
+        }
+      ]
+    },
+    "storage": {
+      "struct": {
+        "fields": [
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "struct": {
+                        "fields": [
+                          {
+                            "layout": {
+                              "cell": {
+                                "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                "ty": 0
+                              }
+                            },
+                            "name": "account_id"
+                          }
+                        ]
+                      }
+                    },
+                    "name": "inner"
+                  }
+                ]
+              }
+            },
+            "name": "accumulator"
+          }
+        ]
+      }
+    },
+    "types": [
+      {
+        "id": 0,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 1,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_env",
+            "types",
+            "AccountId"
+          ]
+        }
+      },
+      {
+        "id": 1,
+        "type": {
+          "def": {
+            "array": {
+              "len": 32,
+              "type": 2
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": {
+          "def": {
+            "primitive": "u8"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "inner",
+                  "type": 4,
+                  "typeName": "<Accumulator as::ink_lang::codegen::ContractCallBuilder>::Type"
+                }
+              ]
+            }
+          },
+          "path": [
+            "accumulator",
+            "accumulator",
+            "AccumulatorRef"
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "account_id",
+                  "type": 0,
+                  "typeName": "AccountId"
+                }
+              ]
+            }
+          },
+          "path": [
+            "accumulator",
+            "accumulator",
+            "CallBuilder"
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "type": {
+          "def": {
+            "primitive": "i32"
+          }
+        }
+      }
+    ]
+  }
+}

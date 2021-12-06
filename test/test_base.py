@@ -3,7 +3,8 @@ import unittest
 import logging
 import os
 
-from scalecodec import ScaleBytes, ScaleDecoder
+from scalecodec import ScaleBytes
+from scalecodec.base import ScaleDecoder
 from substrateinterface import SubstrateInterface, ContractMetadata, ContractInstance, Keypair
 from substrateinterface.utils.ss58 import ss58_encode
 from patractinterface.base import SubstrateSubscriber, get_contract_event_type
@@ -50,9 +51,9 @@ class ContractSubscriberTestCase(unittest.TestCase):
             substrate=self.substrate
         )
 
-        typ15 = contract_metadata.get_type_string_for_metadata_type(15)
-        logging.debug("typ15 {}".format(typ15))
-        decoder = ScaleDecoder.get_decoder_class(typ15, 
+        typ14 = contract_metadata.get_type_string_for_metadata_type(14)
+        logging.debug("typ15 {}".format(typ14))
+        decoder = ScaleDecoder.get_decoder_class(typ14, 
             ScaleBytes("0x01d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d"),
             self.substrate.runtime_config)
         evtTransferArgs = decoder.decode()

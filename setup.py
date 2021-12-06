@@ -124,6 +124,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3 :: Only',
     ],
 
@@ -165,13 +166,12 @@ setup(
         'idna>=2.8',
         'requests>=2.25.0',
         'xxhash>=1.3.0',
-        'scalecodec>=0.10.41',
         'py-sr25519-bindings>=0.1.2',
         'py-ed25519-bindings>=0.1.2',
         'py-bip39-bindings>=0.1.6',
         'executor>=23.2',
-        'scalecodec>=0.11.0',
-        'substrate-interface>=0.13.2'
+        'scalecodec>=1.0.19',
+        'substrate-interface>=1.1.1'
     ],  # Optional
 
     # List additional groups of dependencies here (e.g. development

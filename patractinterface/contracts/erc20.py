@@ -5,7 +5,7 @@ import json
 from substrateinterface import SubstrateInterface, ContractInstance, ContractMetadata, ContractCode
 from substrateinterface.exceptions import SubstrateRequestException, DeployContractFailedException
 from substrateinterface import ContractCode, Keypair
-from scalecodec import ScaleBytes, ScaleDecoder
+from scalecodec import ScaleBytes
 from patractinterface.observer import ContractObserver
 from patractinterface.base import get_contract_event_type
 

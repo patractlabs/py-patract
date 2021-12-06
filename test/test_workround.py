@@ -56,4 +56,3 @@ class ContractNormalTestCase(unittest.TestCase):
             'Transfer': on_transfer,
             'Approve': on_approval
         }, to_num=2)
-

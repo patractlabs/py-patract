@@ -1,713 +1,785 @@
 {
-  "metadataVersion": "0.1.0",
   "source": {
-    "hash": "0x38d1a8750b462fe44073eebe513187f33732a2b319ffeb6d76d7db179f68951d",
-    "language": "ink! 3.0.0-rc2",
-    "compiler": "rustc 1.49.0-nightly"
+    "hash": "0x95fbcfd248193474b11b56a8d61db8d2b1d67f5db9ababd5dfbf4836d56b2f03",
+    "language": "ink! 3.0.0-rc6",
+    "compiler": "rustc 1.58.0-nightly"
   },
   "contract": {
     "name": "dns",
-    "version": "3.0.0-rc2",
+    "version": "3.0.0-rc6",
     "authors": [
       "Parity Technologies <admin@parity.io>"
     ]
   },
-  "spec": {
-    "constructors": [
-      {
-        "args": [],
-        "docs": [
-          " Creates a new domain name service contract."
-        ],
-        "name": [
-          "new"
-        ],
-        "selector": "0xd183512b"
+  "V1": {
+    "spec": {
+      "constructors": [
+        {
+          "args": [],
+          "docs": [
+            "Creates a new domain name service contract."
+          ],
+          "name": [
+            "new"
+          ],
+          "selector": "0x9bae9d5e"
+        }
+      ],
+      "docs": [],
+      "events": [
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "from",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Emitted whenever a new name is being registered."
+          ],
+          "name": "Register"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            },
+            {
+              "docs": [],
+              "indexed": false,
+              "name": "from",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "old_address",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 12
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "new_address",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Emitted whenever an address changes."
+          ],
+          "name": "SetAddress"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            },
+            {
+              "docs": [],
+              "indexed": false,
+              "name": "from",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "old_owner",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 12
+              }
+            },
+            {
+              "docs": [],
+              "indexed": true,
+              "name": "new_owner",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Emitted whenever a name is being transferred."
+          ],
+          "name": "Transfer"
+        }
+      ],
+      "messages": [
+        {
+          "args": [
+            {
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            }
+          ],
+          "docs": [
+            " Register specific name with caller as owner."
+          ],
+          "mutates": true,
+          "name": [
+            "register"
+          ],
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 9
+          },
+          "selector": "0x229b553f"
+        },
+        {
+          "args": [
+            {
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            },
+            {
+              "name": "new_address",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Set address for specific name."
+          ],
+          "mutates": true,
+          "name": [
+            "set_address"
+          ],
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 9
+          },
+          "selector": "0xb8a4d3d9"
+        },
+        {
+          "args": [
+            {
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            },
+            {
+              "name": "to",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 8
+              }
+            }
+          ],
+          "docs": [
+            " Transfer owner to another address."
+          ],
+          "mutates": true,
+          "name": [
+            "transfer"
+          ],
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Result"
+            ],
+            "type": 9
+          },
+          "selector": "0x84a15da1"
+        },
+        {
+          "args": [
+            {
+              "name": "name",
+              "type": {
+                "displayName": [
+                  "Hash"
+                ],
+                "type": 3
+              }
+            }
+          ],
+          "docs": [
+            " Get address for specific name."
+          ],
+          "mutates": false,
+          "name": [
+            "get_address"
+          ],
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "AccountId"
+            ],
+            "type": 8
+          },
+          "selector": "0xd259f7ba"
+        }
+      ]
+    },
+    "storage": {
+      "struct": {
+        "fields": [
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "struct": {
+                        "fields": [
+                          {
+                            "layout": {
+                              "cell": {
+                                "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                "ty": 0
+                              }
+                            },
+                            "name": "header"
+                          },
+                          {
+                            "layout": {
+                              "struct": {
+                                "fields": [
+                                  {
+                                    "layout": {
+                                      "cell": {
+                                        "key": "0x0100000000000000000000000000000000000000000000000000000000000000",
+                                        "ty": 1
+                                      }
+                                    },
+                                    "name": "len"
+                                  },
+                                  {
+                                    "layout": {
+                                      "array": {
+                                        "cellsPerElem": 1,
+                                        "layout": {
+                                          "cell": {
+                                            "key": "0x0100000001000000000000000000000000000000000000000000000000000000",
+                                            "ty": 2
+                                          }
+                                        },
+                                        "len": 4294967295,
+                                        "offset": "0x0200000000000000000000000000000000000000000000000000000000000000"
+                                      }
+                                    },
+                                    "name": "elems"
+                                  }
+                                ]
+                              }
+                            },
+                            "name": "entries"
+                          }
+                        ]
+                      }
+                    },
+                    "name": "keys"
+                  },
+                  {
+                    "layout": {
+                      "hash": {
+                        "layout": {
+                          "cell": {
+                            "key": "0x0200000001000000000000000000000000000000000000000000000000000000",
+                            "ty": 7
+                          }
+                        },
+                        "offset": "0x0100000001000000000000000000000000000000000000000000000000000000",
+                        "strategy": {
+                          "hasher": "Blake2x256",
+                          "postfix": "",
+                          "prefix": "0x696e6b20686173686d6170"
+                        }
+                      }
+                    },
+                    "name": "values"
+                  }
+                ]
+              }
+            },
+            "name": "name_to_address"
+          },
+          {
+            "layout": {
+              "struct": {
+                "fields": [
+                  {
+                    "layout": {
+                      "struct": {
+                        "fields": [
+                          {
+                            "layout": {
+                              "cell": {
+                                "key": "0x0200000001000000000000000000000000000000000000000000000000000000",
+                                "ty": 0
+                              }
+                            },
+                            "name": "header"
+                          },
+                          {
+                            "layout": {
+                              "struct": {
+                                "fields": [
+                                  {
+                                    "layout": {
+                                      "cell": {
+                                        "key": "0x0300000001000000000000000000000000000000000000000000000000000000",
+                                        "ty": 1
+                                      }
+                                    },
+                                    "name": "len"
+                                  },
+                                  {
+                                    "layout": {
+                                      "array": {
+                                        "cellsPerElem": 1,
+                                        "layout": {
+                                          "cell": {
+                                            "key": "0x0300000002000000000000000000000000000000000000000000000000000000",
+                                            "ty": 2
+                                          }
+                                        },
+                                        "len": 4294967295,
+                                        "offset": "0x0400000001000000000000000000000000000000000000000000000000000000"
+                                      }
+                                    },
+                                    "name": "elems"
+                                  }
+                                ]
+                              }
+                            },
+                            "name": "entries"
+                          }
+                        ]
+                      }
+                    },
+                    "name": "keys"
+                  },
+                  {
+                    "layout": {
+                      "hash": {
+                        "layout": {
+                          "cell": {
+                            "key": "0x0400000002000000000000000000000000000000000000000000000000000000",
+                            "ty": 7
+                          }
+                        },
+                        "offset": "0x0300000002000000000000000000000000000000000000000000000000000000",
+                        "strategy": {
+                          "hasher": "Blake2x256",
+                          "postfix": "",
+                          "prefix": "0x696e6b20686173686d6170"
+                        }
+                      }
+                    },
+                    "name": "values"
+                  }
+                ]
+              }
+            },
+            "name": "name_to_owner"
+          },
+          {
+            "layout": {
+              "cell": {
+                "key": "0x0400000002000000000000000000000000000000000000000000000000000000",
+                "ty": 8
+              }
+            },
+            "name": "default_address"
+          }
+        ]
       }
-    ],
-    "docs": [],
-    "events": [
+    },
+    "types": [
       {
-        "args": [
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
+        "id": 0,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "last_vacant",
+                  "type": 1,
+                  "typeName": "Index"
+                },
+                {
+                  "name": "len",
+                  "type": 1,
+                  "typeName": "u32"
+                },
+                {
+                  "name": "len_entries",
+                  "type": 1,
+                  "typeName": "u32"
+                }
+              ]
             }
           },
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "from",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
-            }
-          }
-        ],
-        "docs": [
-          " Emitted whenever a new name is being registered."
-        ],
-        "name": "Register"
+          "path": [
+            "ink_storage",
+            "collections",
+            "stash",
+            "Header"
+          ]
+        }
       },
       {
-        "args": [
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
-            }
-          },
-          {
-            "docs": [],
-            "indexed": false,
-            "name": "from",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
-            }
-          },
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "old_address",
-            "type": {
-              "displayName": [
-                "Option"
-              ],
-              "type": 13
-            }
-          },
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "new_address",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
-            }
+        "id": 1,
+        "type": {
+          "def": {
+            "primitive": "u32"
           }
-        ],
-        "docs": [
-          " Emitted whenever an address changes."
-        ],
-        "name": "SetAddress"
+        }
       },
       {
-        "args": [
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
+        "id": 2,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 6,
+                      "typeName": "VacantEntry"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Vacant"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 3,
+                      "typeName": "T"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Occupied"
+                }
+              ]
             }
           },
-          {
-            "docs": [],
-            "indexed": false,
-            "name": "from",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
+          "params": [
+            {
+              "name": "T",
+              "type": 3
             }
-          },
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "old_owner",
-            "type": {
-              "displayName": [
-                "Option"
-              ],
-              "type": 13
-            }
-          },
-          {
-            "docs": [],
-            "indexed": true,
-            "name": "new_owner",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
-            }
-          }
-        ],
-        "docs": [
-          " Emitted whenver a name is being transferred."
-        ],
-        "name": "Transfer"
-      }
-    ],
-    "messages": [
-      {
-        "args": [
-          {
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
-            }
-          }
-        ],
-        "docs": [
-          " Register specific name with caller as owner."
-        ],
-        "mutates": true,
-        "name": [
-          "register"
-        ],
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "Result"
           ],
-          "type": 10
-        },
-        "selector": "0x7fb0aded"
+          "path": [
+            "ink_storage",
+            "collections",
+            "stash",
+            "Entry"
+          ]
+        }
       },
       {
-        "args": [
-          {
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
+        "id": 3,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 4,
+                  "typeName": "[u8; 32]"
+                }
+              ]
             }
           },
-          {
-            "name": "new_address",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
-            }
-          }
-        ],
-        "docs": [
-          " Set address for specific name."
-        ],
-        "mutates": true,
-        "name": [
-          "set_address"
-        ],
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "Result"
-          ],
-          "type": 10
-        },
-        "selector": "0x220ac6e3"
+          "path": [
+            "ink_env",
+            "types",
+            "Hash"
+          ]
+        }
       },
       {
-        "args": [
-          {
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
+        "id": 4,
+        "type": {
+          "def": {
+            "array": {
+              "len": 32,
+              "type": 5
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": {
+          "def": {
+            "primitive": "u8"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "next",
+                  "type": 1,
+                  "typeName": "Index"
+                },
+                {
+                  "name": "prev",
+                  "type": 1,
+                  "typeName": "Index"
+                }
+              ]
             }
           },
-          {
-            "name": "to",
-            "type": {
-              "displayName": [
-                "AccountId"
-              ],
-              "type": 9
-            }
-          }
-        ],
-        "docs": [
-          " Transfer owner to another address."
-        ],
-        "mutates": true,
-        "name": [
-          "transfer"
-        ],
-        "payable": false,
-        "returnType": {
-          "displayName": [
-            "Result"
-          ],
-          "type": 10
-        },
-        "selector": "0xfae3a09d"
+          "path": [
+            "ink_storage",
+            "collections",
+            "stash",
+            "VacantEntry"
+          ]
+        }
       },
       {
-        "args": [
-          {
-            "name": "name",
-            "type": {
-              "displayName": [
-                "Hash"
-              ],
-              "type": 4
+        "id": 7,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "value",
+                  "type": 8,
+                  "typeName": "V"
+                },
+                {
+                  "name": "key_index",
+                  "type": 1,
+                  "typeName": "KeyIndex"
+                }
+              ]
             }
-          }
-        ],
-        "docs": [
-          " Get address for specific name."
-        ],
-        "mutates": false,
-        "name": [
-          "get_address"
-        ],
-        "payable": false,
-        "returnType": {
-          "displayName": [
+          },
+          "params": [
+            {
+              "name": "V",
+              "type": 8
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "collections",
+            "hashmap",
+            "ValueEntry"
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 4,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_env",
+            "types",
             "AccountId"
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 10
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 11
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 10
+            },
+            {
+              "name": "E",
+              "type": 11
+            }
           ],
-          "type": 9
-        },
-        "selector": "0xb9ee7664"
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "type": {
+          "def": {
+            "tuple": []
+          }
+        }
+      },
+      {
+        "id": 11,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "NameAlreadyExists"
+                },
+                {
+                  "index": 1,
+                  "name": "CallerIsNotOwner"
+                }
+              ]
+            }
+          },
+          "path": [
+            "dns",
+            "dns",
+            "Error"
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 8
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 8
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
       }
     ]
-  },
-  "storage": {
-    "struct": {
-      "fields": [
-        {
-          "layout": {
-            "struct": {
-              "fields": [
-                {
-                  "layout": {
-                    "struct": {
-                      "fields": [
-                        {
-                          "layout": {
-                            "cell": {
-                              "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
-                              "ty": 1
-                            }
-                          },
-                          "name": "header"
-                        },
-                        {
-                          "layout": {
-                            "struct": {
-                              "fields": [
-                                {
-                                  "layout": {
-                                    "cell": {
-                                      "key": "0x0100000000000000000000000000000000000000000000000000000000000000",
-                                      "ty": 2
-                                    }
-                                  },
-                                  "name": "len"
-                                },
-                                {
-                                  "layout": {
-                                    "array": {
-                                      "cellsPerElem": 1,
-                                      "layout": {
-                                        "cell": {
-                                          "key": "0x0100000001000000000000000000000000000000000000000000000000000000",
-                                          "ty": 3
-                                        }
-                                      },
-                                      "len": 4294967295,
-                                      "offset": "0x0200000000000000000000000000000000000000000000000000000000000000"
-                                    }
-                                  },
-                                  "name": "elems"
-                                }
-                              ]
-                            }
-                          },
-                          "name": "entries"
-                        }
-                      ]
-                    }
-                  },
-                  "name": "keys"
-                },
-                {
-                  "layout": {
-                    "hash": {
-                      "layout": {
-                        "cell": {
-                          "key": "0x0200000001000000000000000000000000000000000000000000000000000000",
-                          "ty": 8
-                        }
-                      },
-                      "offset": "0x0100000001000000000000000000000000000000000000000000000000000000",
-                      "strategy": {
-                        "hasher": "Blake2x256",
-                        "postfix": "",
-                        "prefix": "0x696e6b20686173686d6170"
-                      }
-                    }
-                  },
-                  "name": "values"
-                }
-              ]
-            }
-          },
-          "name": "name_to_address"
-        },
-        {
-          "layout": {
-            "struct": {
-              "fields": [
-                {
-                  "layout": {
-                    "struct": {
-                      "fields": [
-                        {
-                          "layout": {
-                            "cell": {
-                              "key": "0x0200000001000000000000000000000000000000000000000000000000000000",
-                              "ty": 1
-                            }
-                          },
-                          "name": "header"
-                        },
-                        {
-                          "layout": {
-                            "struct": {
-                              "fields": [
-                                {
-                                  "layout": {
-                                    "cell": {
-                                      "key": "0x0300000001000000000000000000000000000000000000000000000000000000",
-                                      "ty": 2
-                                    }
-                                  },
-                                  "name": "len"
-                                },
-                                {
-                                  "layout": {
-                                    "array": {
-                                      "cellsPerElem": 1,
-                                      "layout": {
-                                        "cell": {
-                                          "key": "0x0300000002000000000000000000000000000000000000000000000000000000",
-                                          "ty": 3
-                                        }
-                                      },
-                                      "len": 4294967295,
-                                      "offset": "0x0400000001000000000000000000000000000000000000000000000000000000"
-                                    }
-                                  },
-                                  "name": "elems"
-                                }
-                              ]
-                            }
-                          },
-                          "name": "entries"
-                        }
-                      ]
-                    }
-                  },
-                  "name": "keys"
-                },
-                {
-                  "layout": {
-                    "hash": {
-                      "layout": {
-                        "cell": {
-                          "key": "0x0400000002000000000000000000000000000000000000000000000000000000",
-                          "ty": 8
-                        }
-                      },
-                      "offset": "0x0300000002000000000000000000000000000000000000000000000000000000",
-                      "strategy": {
-                        "hasher": "Blake2x256",
-                        "postfix": "",
-                        "prefix": "0x696e6b20686173686d6170"
-                      }
-                    }
-                  },
-                  "name": "values"
-                }
-              ]
-            }
-          },
-          "name": "name_to_owner"
-        },
-        {
-          "layout": {
-            "cell": {
-              "key": "0x0400000002000000000000000000000000000000000000000000000000000000",
-              "ty": 9
-            }
-          },
-          "name": "default_address"
-        }
-      ]
-    }
-  },
-  "types": [
-    {
-      "def": {
-        "composite": {
-          "fields": [
-            {
-              "name": "last_vacant",
-              "type": 2
-            },
-            {
-              "name": "len",
-              "type": 2
-            },
-            {
-              "name": "len_entries",
-              "type": 2
-            }
-          ]
-        }
-      },
-      "path": [
-        "ink_storage",
-        "collections",
-        "stash",
-        "Header"
-      ]
-    },
-    {
-      "def": {
-        "primitive": "u32"
-      }
-    },
-    {
-      "def": {
-        "variant": {
-          "variants": [
-            {
-              "fields": [
-                {
-                  "type": 7
-                }
-              ],
-              "name": "Vacant"
-            },
-            {
-              "fields": [
-                {
-                  "type": 4
-                }
-              ],
-              "name": "Occupied"
-            }
-          ]
-        }
-      },
-      "params": [
-        4
-      ],
-      "path": [
-        "ink_storage",
-        "collections",
-        "stash",
-        "Entry"
-      ]
-    },
-    {
-      "def": {
-        "composite": {
-          "fields": [
-            {
-              "type": 5
-            }
-          ]
-        }
-      },
-      "path": [
-        "ink_env",
-        "types",
-        "Hash"
-      ]
-    },
-    {
-      "def": {
-        "array": {
-          "len": 32,
-          "type": 6
-        }
-      }
-    },
-    {
-      "def": {
-        "primitive": "u8"
-      }
-    },
-    {
-      "def": {
-        "composite": {
-          "fields": [
-            {
-              "name": "next",
-              "type": 2
-            },
-            {
-              "name": "prev",
-              "type": 2
-            }
-          ]
-        }
-      },
-      "path": [
-        "ink_storage",
-        "collections",
-        "stash",
-        "VacantEntry"
-      ]
-    },
-    {
-      "def": {
-        "composite": {
-          "fields": [
-            {
-              "name": "value",
-              "type": 9
-            },
-            {
-              "name": "key_index",
-              "type": 2
-            }
-          ]
-        }
-      },
-      "params": [
-        9
-      ],
-      "path": [
-        "ink_storage",
-        "collections",
-        "hashmap",
-        "ValueEntry"
-      ]
-    },
-    {
-      "def": {
-        "composite": {
-          "fields": [
-            {
-              "type": 5
-            }
-          ]
-        }
-      },
-      "path": [
-        "ink_env",
-        "types",
-        "AccountId"
-      ]
-    },
-    {
-      "def": {
-        "variant": {
-          "variants": [
-            {
-              "fields": [
-                {
-                  "type": 11
-                }
-              ],
-              "name": "Ok"
-            },
-            {
-              "fields": [
-                {
-                  "type": 12
-                }
-              ],
-              "name": "Err"
-            }
-          ]
-        }
-      },
-      "params": [
-        11,
-        12
-      ],
-      "path": [
-        "Result"
-      ]
-    },
-    {
-      "def": {
-        "tuple": []
-      }
-    },
-    {
-      "def": {
-        "variant": {
-          "variants": [
-            {
-              "discriminant": 0,
-              "name": "NameAlreadyExists"
-            },
-            {
-              "discriminant": 1,
-              "name": "CallerIsNotOwner"
-            }
-          ]
-        }
-      },
-      "path": [
-        "dns",
-        "dns",
-        "Error"
-      ]
-    },
-    {
-      "def": {
-        "variant": {
-          "variants": [
-            {
-              "name": "None"
-            },
-            {
-              "fields": [
-                {
-                  "type": 9
-                }
-              ],
-              "name": "Some"
-            }
-          ]
-        }
-      },
-      "params": [
-        9
-      ],
-      "path": [
-        "Option"
-      ]
-    }
-  ]
+  }
 }

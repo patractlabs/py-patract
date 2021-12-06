@@ -2,8 +2,6 @@ import os
 import logging
 import json
 
-from scalecodec.block import EventRecord, EventsDecoder, LogDigest, MetadataDecoder
-from scalecodec.metadata import MetadataV12Decoder
 from scalecodec.base import ScaleDecoder
 from scalecodec import ScaleBytes, ScaleType, GenericContractExecResult
 from substrateinterface import SubstrateInterface, ContractMetadata, ContractInstance, Keypair

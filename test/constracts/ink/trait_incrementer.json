@@ -1,11 +1,11 @@
 {
   "source": {
-    "hash": "0x88af2390f1eb7c7adbf9bc726e454e94507995627e1e38d6df4d5071cc274849",
+    "hash": "0x5ce5992896f5ba4cb10babde6e557e7842fbe2aaeb3c2d7a3a7ac83786a55d30",
     "language": "ink! 3.0.0-rc6",
     "compiler": "rustc 1.58.0-nightly"
   },
   "contract": {
-    "name": "flipper",
+    "name": "trait-incrementer",
     "version": "3.0.0-rc6",
     "authors": [
       "Parity Technologies <admin@parity.io>"
@@ -20,64 +20,87 @@
               "name": "init_value",
               "type": {
                 "displayName": [
-                  "bool"
+                  "u64"
                 ],
                 "type": 0
               }
             }
           ],
           "docs": [
-            "Creates a new flipper smart contract initialized with the given value."
+            "Creates a new incrementer smart contract initialized with zero."
           ],
           "name": [
             "new"
           ],
           "selector": "0x9bae9d5e"
-        },
-        {
-          "args": [],
-          "docs": [
-            "Creates a new flipper smart contract initialized to `false`."
-          ],
-          "name": [
-            "default"
-          ],
-          "selector": "0xed4b9d1b"
         }
       ],
       "docs": [],
       "events": [],
       "messages": [
         {
-          "args": [],
+          "args": [
+            {
+              "name": "delta",
+              "type": {
+                "displayName": [
+                  "u64"
+                ],
+                "type": 0
+              }
+            }
+          ],
           "docs": [
-            " Flips the current value of the Flipper's boolean."
+            " Increases the value of the incrementer by an amount."
           ],
           "mutates": true,
           "name": [
-            "flip"
+            "inc_by"
           ],
           "payable": false,
           "returnType": null,
-          "selector": "0x633aa551"
+          "selector": "0xfe5bd8ea"
         },
         {
           "args": [],
-          "docs": [
-            " Returns the current value of the Flipper's boolean."
+          "docs": [],
+          "mutates": true,
+          "name": [
+            "Increment",
+            "inc"
           ],
+          "payable": false,
+          "returnType": null,
+          "selector": "0xa599f3cf"
+        },
+        {
+          "args": [],
+          "docs": [],
           "mutates": false,
           "name": [
+            "Increment",
             "get"
           ],
           "payable": false,
           "returnType": {
             "displayName": [
-              "bool"
+              "u64"
             ],
             "type": 0
           },
-          "selector": "0x2f865bd9"
+          "selector": "0x66a84ab0"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "mutates": true,
+          "name": [
+            "Reset",
+            "reset"
+          ],
+          "payable": false,
+          "returnType": null,
+          "selector": "0x6e2d5a76"
         }
       ]
     },
@@ -101,7 +124,7 @@
         "id": 0,
         "type": {
           "def": {
-            "primitive": "bool"
+            "primitive": "u64"
           }
         }
       }
